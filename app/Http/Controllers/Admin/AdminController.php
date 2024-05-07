@@ -83,7 +83,7 @@ class AdminController extends Controller
         try {
             DB::beginTransaction();
             $teacher = ProfileTeacher::with('user')->whereDoesntHave('user.blocks')->get();
-            
+
             DB::commit();
             return $this->returnData($teacher, 200);
         } catch (\Exception $ex) {
@@ -108,15 +108,20 @@ class AdminController extends Controller
     {
         try {
             DB::beginTransaction();
-            $users = User::where('role_id', 'student')->whereDoesntHave('blocks')->get();
-            $data = [];
-            foreach ($users as $user) {
-                if ($user->profile_student) {
-                    $data[] = $user;
-                }
-            }
+            //$users = User::where('role_id', 'student')->whereDoesntHave('blocks')->get();
+            $users=User::whereHas('roles',function ($q){
+                $q->where('name',"student");
+            })->whereHas('profile_teacher',function ($qu){
+                $qu->where('status',1);
+            })->whereDoesntHave('blocks')->count();
+//            $data = [];
+//            foreach ($users as $user) {
+//                if ($user->profile_student) {
+//                    $data[] = $user;
+//                }
+//            }
             DB::commit();
-            return $this->returnData(count($data), 200);
+            return $this->returnData(200,$users);
         } catch (\Exception $ex) {
             DB::rollback();
             return $this->returnError($ex->getCode(), $ex->getMessage());
@@ -126,17 +131,22 @@ class AdminController extends Controller
     {
         try {
             DB::beginTransaction();
-            $users = User::where('role_id', 'teacher')->whereDoesntHave('blocks')->get();
-            $data = [];
-            foreach ($users as $user) {
-                if ($user->profile_teacher) {
-                    if ($user->profile_teacher->status == 1) {
-                        $data[] = $user;
-                    }
-                }
-            }
+            //$users = User::where('role_id', 'teacher')->whereDoesntHave('blocks')->get();
+            $users=User::whereHas('roles',function ($q){
+                $q->where('name',"teacher");
+            })->whereHas('profile_teacher',function ($qu){
+                $qu->where('status',1);
+            })->whereDoesntHave('blocks')->count();
+//            $data = [];
+//            foreach ($users as $user) {
+//                if ($user->profile_teacher) {
+//                    if ($user->profile_teacher->status == 1) {
+//                        $data[] = $user;
+//                    }
+//                }
+//            }
             DB::commit();
-            return $this->returnData(count($data), 200);
+            return $this->returnData(200,$users);
         } catch (\Exception $ex) {
             DB::rollback();
             return $this->returnError($ex->getCode(), $ex->getMessage());
@@ -146,7 +156,10 @@ class AdminController extends Controller
     {
         try {
             DB::beginTransaction();
-            $user = User::where('role_id', 'teacher')->find($id);
+            //$user = User::where('role_id', 'teacher')->find($id);
+            $user=User::where('id',$id)->whereHas('roles',function($query){
+                $query->where('name',"teacher");
+            })->first();
             if (!$user) {
                 return $this->returnError(404, 'not Found teacher');
             }
@@ -164,7 +177,10 @@ class AdminController extends Controller
     {
         try {
             DB::beginTransaction();
-            $user = User::where('role_id', 'student')->find($id);
+            //$user = User::where('role_id', 'student')->find($id);
+            $user=User::where('id',$id)->whereHas('roles',function($query){
+                $query->where('name',"student");
+            })->first();
             if (!$user) {
                 return $this->returnError(404, 'not Found student');
             }
@@ -225,7 +241,7 @@ class AdminController extends Controller
     // for ($i = 26; $i < 50; $i++) {
     //     $user = ProfileStudent::create([
     //         'user_id' =>$i,
-    //         'educational_level' => 'eweq',  
+    //         'educational_level' => 'eweq',
     //         'description' => 'yti',
     //         'assessing' => 0
     //     ]);
