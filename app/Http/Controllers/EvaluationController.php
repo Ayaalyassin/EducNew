@@ -42,7 +42,7 @@ class EvaluationController extends Controller
 
             $teacher=ProfileTeacher::find($request->teacher_id);
             if(!$teacher)
-                return $this->returnError("", 'teacher not found');
+                return $this->returnError("404", 'teacher not found');
 
             $evaluation= $profile_student->evaluation_as_student()->create([
                 'rate' => $request->rate,
@@ -91,7 +91,7 @@ class EvaluationController extends Controller
             $user=auth()->user()->profile_student()->first();
             $evaluation=$user->evaluation_as_student()->find($id);
             if(!$evaluation)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             $evaluation->delete();
 
             DB::commit();

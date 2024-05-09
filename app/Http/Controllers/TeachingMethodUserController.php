@@ -34,15 +34,24 @@ class TeachingMethodUserController extends Controller
         try {
             DB::beginTransaction();
 
-            $profile_student=auth()->user()->profile_student()->first();
+            $user=auth()->user();
+
+            $profile_student=$user->profile_student()->first();
 
             $teaching_method=TeachingMethod::find($request->teaching_method_id);
 
             if(!$teaching_method)
-                return $this->returnError("", 'teaching method not found');
+                return $this->returnError("404", 'teaching method not found');
             $is_exist=$profile_student->teaching_methods_user()->where('teaching_method_id',$request->teaching_method_id)->get();
             if(count($is_exist)>0)
                 return $this->returnError("400", 'teaching method already exist');
+
+            if ($user->wallet->value < $teaching_method->price)
+                return $this->returnError("500", 'not Enough money in wallet');
+            $user->wallet->update([
+                'value' => $user->wallet->value - $teaching_method->price
+            ]);
+            $user->wallet->save();
 
             $profile_student->teaching_methods_user()->attach([
                 $request->teaching_method_id
@@ -66,7 +75,7 @@ class TeachingMethodUserController extends Controller
 
             $teaching_method_user=$profile_student->teaching_methods_user()->where('teaching_method_users.id',$id)->first();
             if(!$teaching_method_user)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             $profile_student->teaching_methods_user()->newPivotStatement()->where('id',$id)->delete();
 
             DB::commit();

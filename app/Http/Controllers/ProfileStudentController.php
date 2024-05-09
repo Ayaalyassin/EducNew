@@ -151,7 +151,7 @@ class ProfileStudentController extends Controller
 
             $profile_student = $user->profile_student()->first();
             if (!$profile_student)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             $profile_student->delete();
 
             DB::commit();

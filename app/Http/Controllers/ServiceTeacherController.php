@@ -22,7 +22,7 @@ class ServiceTeacherController extends Controller
             //$profile_teacher=User::find($teacher_id)->profile_teacher()->first();
             $profile_teacher=ProfileTeacher::find($teacher_id);
             if (!$profile_teacher) {
-                return $this->returnError("401",'user Not found');
+                return $this->returnError("404",'user Not found');
             }
             $service_teachers=$profile_teacher->service_teachers()->get();
             return $this->returnData($service_teachers,'operation completed successfully');
@@ -89,7 +89,7 @@ class ServiceTeacherController extends Controller
             $service_teacher=$profile_teacher->service_teachers()->find($id);
 
             if(!$service_teacher)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
 
             $service_teacher->update([
                 'price' => isset($request->price)? $request->price :$service_teacher->price,
@@ -115,7 +115,7 @@ class ServiceTeacherController extends Controller
             $profile_teacher=auth()->user()->profile_teacher()->first();
             $service_teacher=$profile_teacher->service_teachers()->find($id);
             if(!$service_teacher)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             $service_teacher->delete();
 
             DB::commit();

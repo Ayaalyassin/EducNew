@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BlockController;
+use App\Http\Controllers\ProfileStudentAdsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -298,4 +299,13 @@ Route::group(['middleware' => ['jwt.verify']], function () {
             Route::post('store', 'store');
             Route::post('update', 'update');
         });
+
+    Route::group(['middleware' => ['hasRole:student']], function () {
+        Route::group(['prefix' => 'ProfileStudentAds'], function () {
+            Route::post('store', [ProfileStudentAdsController::class, 'store'])->middleware('profileStudent');
+            Route::delete('delete/{id}', [ProfileStudentAdsController::class, 'destroy']);
+            Route::get('getMyAds', [ProfileStudentAdsController::class, 'getMyAds']);
+            Route::get('getById/{id}', [ProfileStudentAdsController::class, 'show']);
+        });
+    });
 });

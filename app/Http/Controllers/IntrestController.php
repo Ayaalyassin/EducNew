@@ -20,7 +20,7 @@ class IntrestController extends Controller
         try {
             $profile_student=auth()->user()->profile_student()->first();
             if (!$profile_student) {
-                return $this->returnError("401",'user Not found');
+                return $this->returnError("404",'user Not found');
             }
             $intrests=$profile_student->intrests()->get();
             return $this->returnData($intrests,'operation completed successfully');
@@ -86,7 +86,7 @@ class IntrestController extends Controller
 
             $intrest=$profile_student->intrests()->find($id);
             if(!$intrest)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             $intrest->update([
                 'type' =>$request->type,
             ]);
@@ -108,6 +108,8 @@ class IntrestController extends Controller
             DB::beginTransaction();
             $profile_student=auth()->user()->profile_student()->first();
             $intrest=$profile_student->intrests()->find($id);
+            if(!$intrest)
+                return $this->returnError("404", 'not found');
             $intrest->delete();
 
             DB::commit();

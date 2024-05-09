@@ -36,6 +36,17 @@ class ProfileStudent extends Model
         )->withPivot('id');
     }
 
+    public function profile_student_ads()
+    {
+        return $this->belongsToMany(
+            Ads::class,
+            'profile_student_ads',
+            'profile_student_id',
+            'ads_id'
+        )->withPivot('id');
+    }
+
+
     public function evaluation_as_student()
     {
         return $this->hasMany(Evaluation::class, 'profile_student_id', 'id');

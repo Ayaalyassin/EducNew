@@ -93,7 +93,7 @@ class AdsController extends Controller
         try {
             $data = Ads::where('id', $id)->first();
             if (!$data) {
-                return $this->returnError('Not found', 401);
+                return $this->returnError("404", "Not found");
             }
             return $this->returnData($data, 'operation completed successfully');
         } catch (\Exception $ex) {
@@ -122,7 +122,7 @@ class AdsController extends Controller
             $ads=$profile_teacher->ads()->find($id);
 
             if (!$ads)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
 
             $file = null;
             if (isset($request->file)) {
@@ -156,7 +156,7 @@ class AdsController extends Controller
 
             $ads = $profile_teacher->ads()->find($id);
             if (!$ads)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             if (isset($ads->file)) {
                 $this->deleteImage($ads->file);
             }

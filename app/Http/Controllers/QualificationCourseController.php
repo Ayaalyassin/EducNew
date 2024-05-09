@@ -155,7 +155,7 @@ class QualificationCourseController extends Controller
 
             $qualification_course = $user->qualification_courses()->find($id);
             if (!$qualification_course)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
 
             $qualification_course->update([
                 'name' => isset($request->name) ? $request->name : $qualification_course->name,
@@ -185,7 +185,7 @@ class QualificationCourseController extends Controller
             $user = auth()->user();
             $qualification_course = $user->qualification_courses()->find($id);
             if (!$qualification_course)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             $qualification_course->delete();
 
             DB::commit();

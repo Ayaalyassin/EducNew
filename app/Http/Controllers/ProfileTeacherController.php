@@ -155,7 +155,7 @@ class ProfileTeacherController extends Controller
 
             $profile_teacher = $user->profile_teacher()->first();
             if (!$profile_teacher)
-                return $this->returnError("", 'not found');
+                return $this->returnError("404", 'not found');
             $profile_teacher->delete();
             DB::commit();
             return $this->returnSuccessMessage('operation completed successfully');

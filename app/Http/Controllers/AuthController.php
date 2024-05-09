@@ -77,7 +77,7 @@ class AuthController extends Controller
         $token = JWTAuth::attempt($credentials);
 
         if (!$token)
-            return $this->returnError("", 'Unauthorized');
+            return $this->returnError("401", 'Unauthorized');
 
         $user = auth()->user();
         $user->token = $token;
@@ -127,12 +127,12 @@ class AuthController extends Controller
         if ($token) {
             try {
                 JWTAuth::setToken($token)->invalidate();
-                return $this->returnError("", 'Logged out successfully');
+                return $this->returnSuccessMessage("Logged out successfully", "200");
             } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-                return $this->returnError("", 'some thing went wrongs');
+                return $this->returnError($e->getCode(), 'some thing went wrongs');
             }
         } else {
-            return $this->returnError("", 'some thing went wrongs');
+            return $this->returnError("400", 'some thing went wrongs');
         }
     }
 }

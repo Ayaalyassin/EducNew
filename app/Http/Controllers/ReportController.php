@@ -30,7 +30,7 @@ class ReportController extends Controller
             }])->get();
 
             DB::commit();
-            return $this->returnData($reports, 200);
+            return $this->returnData($reports,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
             return $this->returnError($ex->getCode(), $ex->getMessage());

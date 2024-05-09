@@ -89,7 +89,7 @@ class NoteController extends Controller
             $user = auth()->user();
             $note = $user->note_as_teacher()->find($id);
             if (!$note)
-                return $this->returnError("", 'note not found');
+                return $this->returnError("404", 'note not found');
             $note->delete();
 
             DB::commit();
