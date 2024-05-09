@@ -28,7 +28,7 @@ class AdsRequest extends FormRequest
         return [
             'name'=>'required|string',
             'description'=>'required|string',
-            'price'=>'required|numeric',
+            'price'=>'required|numeric|gt:0',
             'number_students'=>'required|integer',
             'file'=>'required|file',
             'place'=>'required|string'

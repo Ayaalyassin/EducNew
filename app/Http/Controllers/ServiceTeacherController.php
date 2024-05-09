@@ -40,8 +40,8 @@ class ServiceTeacherController extends Controller
 
             $profile_teacher=auth()->user()->profile_teacher()->first();
 
-            $profile_teacher->service_teachers()->where('type',$request->type)->first();
-            if($profile_teacher)
+            $exist=$profile_teacher->service_teachers()->where('type',$request->type)->first();
+            if($exist)
                 return $this->returnError('500', 'the service already exist');
 
             $service_teacher= $profile_teacher->service_teachers()->create([

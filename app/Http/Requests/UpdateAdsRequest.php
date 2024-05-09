@@ -22,7 +22,7 @@ class UpdateAdsRequest extends FormRequest
         return [
             'name'=>'string',
             'description'=>'string',
-            'price'=>'numeric',
+            'price'=>'numeric|gt:0',
             'number_students'=>'integer',
             'file'=>'file',
             'place'=>'string'
