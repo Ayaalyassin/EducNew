@@ -14,7 +14,7 @@ class ProfileTeacher extends Model
         'certificate',
         'description',
         'jurisdiction',
-        'domain',
+        //'domain',
         'status',
         'assessing',
     ];
@@ -53,6 +53,10 @@ class ProfileTeacher extends Model
         return $this->hasMany(Note::class, 'profile_teacher_id', 'id');
     }
 
+    public function domains()
+    {
+        return $this->hasMany(Domain::class, 'profile_teacher_id', 'id');
+    }
 
     public function report_as_reporter()
     {

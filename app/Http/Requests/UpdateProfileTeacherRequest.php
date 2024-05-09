@@ -29,7 +29,7 @@ class UpdateProfileTeacherRequest extends FormRequest
             'certificate' => 'sometimes|image|mimes:jpeg,jpg,png,gif',
             'description' => 'sometimes|string',
             'jurisdiction' => 'sometimes|string',
-            'domain' => 'sometimes|string',
+            //'domain' => 'sometimes|string',
         ];
     }
 

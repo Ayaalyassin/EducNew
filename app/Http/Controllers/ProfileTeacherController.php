@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileTeacherRequest;
+use App\Models\AdsFile;
+use App\Models\Domain;
 use App\Models\ProfileTeacher;
 use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
@@ -23,7 +25,7 @@ class ProfileTeacherController extends Controller
             DB::beginTransaction();
 
             $profile_teacher = ProfileTeacher::where('status',1)->get();
-            $profile_teacher->loadMissing(['user']);
+            $profile_teacher->loadMissing(['user','domains']);
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
@@ -49,10 +51,24 @@ class ProfileTeacherController extends Controller
                 'certificate' => $certificate,
                 'description' => isset($request->description) ? $request->description : null,
                 'jurisdiction' => isset($request->jurisdiction) ? $request->jurisdiction : null,
-                'domain' => isset($request->domain) ? $request->domain : null,
+                //'domain' => isset($request->domain) ? $request->domain : null,
                 'status' => 0,
                 'assessing' => 0
             ]);
+            $domains = $request->domains;
+            $list_domains = [];
+            foreach ($domains as $value) {
+                $domain = [
+                    'profile_teacher_id' => $profile_teacher->id,
+                    'type' => $value,
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                array_push($list_domains, $domain);
+            }
+            Domain::insert($list_domains);
+
+            $profile_teacher->loadMissing('domains');
+
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
@@ -68,7 +84,7 @@ class ProfileTeacherController extends Controller
             DB::beginTransaction();
 
             $profile_teacher = auth()->user()->profile_teacher()->first();
-            $profile_teacher->loadMissing(['user']);
+            $profile_teacher->loadMissing(['user','domains']);
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
@@ -86,7 +102,7 @@ class ProfileTeacherController extends Controller
             $profile_teacher = ProfileTeacher::find($id);
             if (!$profile_teacher)
                 return $this->returnError("401", 'Not found');
-            $profile_teacher->loadMissing(['user']);
+            $profile_teacher->loadMissing(['user','domains']);
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
@@ -117,9 +133,10 @@ class ProfileTeacherController extends Controller
                 'certificate' => isset($request->certificate) ? $certificate : $profile_teacher->certificate,
                 'description' => isset($request->description) ? $request->description : $profile_teacher->description,
                 'jurisdiction' => isset($request->jurisdiction) ? $request->jurisdiction : $profile_teacher->jurisdiction,
-                'domain'=>isset($request->domain) ? $request->domain : $profile_teacher->domain,
+                //'domain'=>isset($request->domain) ? $request->domain : $profile_teacher->domain,
             ]);
 
+            $profile_teacher->loadMissing('domains');
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {

@@ -14,7 +14,7 @@ trait GeneralTrait
             'status' => false,
             'errNum' => $errNum,
             'message' => $msg
-        ],400);
+        ],intval($errNum));
     }
 
 
@@ -24,7 +24,7 @@ trait GeneralTrait
             'status' => true,
             'errNum' => $errNum,
             'message' => $msg
-        ],200);
+        ],intval($errNum));
     }
 
     public function returnData($value, $msg = "successfully")
