@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BlockController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileStudentAdsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -308,4 +309,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
             Route::get('getById/{id}', [ProfileStudentAdsController::class, 'show']);
         });
     });
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::get("", [NotificationController::class, 'getAll']);
+        Route::get("not_viewed", [NotificationController::class, 'getNotificationsNotViewed']);
+        Route::get("viewed", [NotificationController::class, 'getNotificationsViewed']);
+        Route::get("{id}", [NotificationController::class, 'getById']);
+        Route::delete("{id}", [NotificationController::class, 'delete']);
+    });
 });
+

@@ -157,7 +157,7 @@ class User extends Authenticatable implements JWTSubject
         )->withPivot('id');
     }
 
-    //kadar 
+    //kadar
     public function wallet()
     {
         return $this->hasOne(Wallet::class, 'user_id', 'id');
@@ -166,6 +166,11 @@ class User extends Authenticatable implements JWTSubject
     public function blocks()
     {
         return $this->hasMany(Block::class, 'user_id', 'id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id');
     }
 
     public function setPasswordAttribute($value)
@@ -187,4 +192,5 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
 }
