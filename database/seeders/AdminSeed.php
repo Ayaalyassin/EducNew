@@ -16,14 +16,17 @@ class AdminSeed extends Seeder
      */
     public function run(): void
     {
-        $admin=User::create([
+//        $admin=User::create([
+        DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin0@gmail.com',
-            'password' => bcrypt('12341234'),
+            'password' => bcrypt('12341234a'),
             'address' => 'malke',
             'governorate' => 'Damascus',
             'birth_date' => '1999-9-9',
         ]);
+
+        $admin=User::find(1);
 
         $role = Role::where('name','admin')->first();
         $admin->assignRole($role);
