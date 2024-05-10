@@ -12,7 +12,7 @@ class Report extends Model
     protected $fillable = [
         'reason',
         'date',
-        'reporter_id',
+        'reporter_id',//
         'reporter_type',
         'reported_id',
         'reported_type'

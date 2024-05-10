@@ -17,11 +17,11 @@ return new class extends Migration
             $table->text('reason');
             $table->date('date');
 
-            $table->bigInteger('reporter_id')->unsigned();
-            $table->foreign('reporter_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('reporter_id')->nullable();
+            $table->string('reporter_type')->nullable();
 
-            $table->bigInteger('reported_id')->unsigned();//المبلغ عنه
-            $table->foreign('reported_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('reported_id')->nullable();//المبلغ عنه
+            $table->string('reported_type')->nullable();
 
             $table->timestamps();
         });

@@ -110,15 +110,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Note::class, 'teacher_id', 'id');
     }
 
-    public function report_as_reporter()
-    {
-        return $this->hasMany(Report::class, 'reporter_id', 'id');
-    }
-
-    public function report_as_reported()
-    {
-        return $this->hasMany(Report::class, 'reported_id', 'id');
-    }
+//    public function report_as_reporter()
+//    {
+//        return $this->morphMany(Report::class, 'reporter');
+//    }
+//
+//    public function report_as_reported()
+//    {
+//        return $this->morphMany(Report::class, 'reported');
+//    }
 
     // public function appointment_available()
     // {
