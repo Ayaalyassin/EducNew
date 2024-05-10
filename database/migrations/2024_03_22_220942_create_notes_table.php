@@ -16,11 +16,11 @@ return new class extends Migration
 
             $table->text('note');
 
-            $table->bigInteger('student_id')->unsigned();
-            $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('profile_student_id')->unsigned();
+            $table->foreign('profile_student_id')->references('id')->on('profile_students')->onDelete('cascade');
 
-            $table->bigInteger('teacher_id')->unsigned();
-            $table->foreign('teacher_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('profile_teacher_id')->unsigned();
+            $table->foreign('profile_teacher_id')->references('id')->on('profile_teachers')->onDelete('cascade');
 
             $table->timestamps();
         });

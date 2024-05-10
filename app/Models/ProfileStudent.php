@@ -76,4 +76,5 @@ class ProfileStudent extends Model
         return $this->hasOne(CompleteStudent::class, 'student_id', 'id');
     }
 
+
 }

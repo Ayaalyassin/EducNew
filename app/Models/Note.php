@@ -11,17 +11,17 @@ class Note extends Model
 
     protected $fillable = [
         'note',
-        'student_id',
-        'teacher_id'
+        'profile_student_id',
+        'profile_teacher_id'
     ];
 
-    public function student()
+    public function profile_student()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(ProfileStudent::class, 'profile_student_id');
     }
 
-    public function teacher()
+    public function profile_teacher()
     {
-        return $this->belongsTo(User::class, 'teacher_id');
+        return $this->belongsTo(ProfileTeacher::class, 'profile_teacher_id');
     }
 }

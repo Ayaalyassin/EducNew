@@ -33,7 +33,7 @@ class ReportController extends Controller
             return $this->returnData($reports,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            //return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError($ex->getCode(), $ex->getMessage());
         }
     }
 
@@ -87,33 +87,33 @@ class ReportController extends Controller
 
             $profile_teacher = ProfileTeacher::find($request->reported_id);
             if (!$profile_teacher) {
-                return $this->returnError("401",'Not found' . ' User Id : ' . $request->reported_id);
+                return $this->returnError("401",'Not found' . ' Profile Teacher Id : ' . $request->reported_id);
 
             }
 
-//            $report = $user->report_as_reporter()->where('reported_id', $request->reported_id)->first();
-//            if ($report) {
-//                $report = $user->report_as_reporter()->update([
-//                    'reason' => $request->reason,
-//                    'date'=>Carbon::now()->format('Y-m-d H:i:s')
-//                ]);
-//            }
-//            else {
+            $report = $user->report_as_reporter()->where('reported_id', $request->reported_id)->first();
+            if ($report) {
+                $report = $user->report_as_reporter()->update([
+                    'reason' => $request->reason,
+                    'date'=>Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+            }
+            else {
                 $report = $user->report_as_reporter()->create([
                     'reason' => $request->reason,
                     'reported_id' => $request->reported_id,
                     'reported_type' => "App\Models\ProfileTeacher",
                     'date'=>Carbon::now()->format('Y-m-d H:i:s')
                 ]);
-            //}
+            }
 
-            //$profile_teacher->loadMissing('report_as_reported');
+            $profile_teacher->loadMissing('report_as_reported');
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError("410", $ex->getMessage());
+            return $this->returnError($ex->getCode(), $ex->getMessage());
         }
     }
 

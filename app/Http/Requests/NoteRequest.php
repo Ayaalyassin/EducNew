@@ -26,7 +26,7 @@ class NoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'note'=>'required|text',
+            'note'=>'required',
             'student_id'=>'integer'
         ];
     }
