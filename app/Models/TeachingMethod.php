@@ -10,13 +10,14 @@ class TeachingMethod extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'type',
-        'description',
-        'file',
+        'title',//
+        'type',//
+        'description',//
+        'file',//
         'status',
         'profile_teacher_id',
-        'price'
+        'price',//
+        'views'
     ];
 
     public function profile_teacher()

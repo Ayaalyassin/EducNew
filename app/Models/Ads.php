@@ -10,14 +10,16 @@ class Ads extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'price',
-        'description',
-        'file',
-        'number_students',
+        'title',//
+        'price',//
+        'description',//
+        'file',//
+        'number_students',//
         'profile_teacher_id',
         'status',
-        'place'
+        'place',//
+        'date',//
+        //'offer'
     ];
 
     public function profile_teacher()

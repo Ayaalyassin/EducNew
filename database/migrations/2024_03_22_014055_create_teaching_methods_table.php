@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('file');
             $table->boolean('status');
             $table->double('price');
+            $table->integer('views')->default(0);
 
 
             $table->bigInteger('profile_teacher_id')->unsigned();

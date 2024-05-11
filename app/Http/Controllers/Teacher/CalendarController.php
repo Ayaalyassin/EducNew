@@ -96,7 +96,7 @@ class CalendarController extends Controller
             return $this->returnData(200, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            //return $this->returnError($ex->getCode(), $ex->getMessage());
         }
     }
 

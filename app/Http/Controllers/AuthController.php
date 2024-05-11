@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CodeRequest;
+use App\Http\Requests\EmailRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Traits\GeneralTrait;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -135,4 +137,80 @@ class AuthController extends Controller
             return $this->returnError("400", 'some thing went wrongs');
         }
     }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        try {
+            $user = auth()->user();
+            if (Hash::check($request->old_password, $user->password)) {
+                $user->update([
+                    'password' => $request->password,
+                ]);
+                return $this->returnSuccessMessage('operation completed successfully');
+            } else {
+                return $this->returnError("400",'failed');
+            }
+        } catch (\Exception $ex) {
+            return $this->returnError($ex->getCode(),'Please try again later');
+        }
+    }
+
+
+    public function forgetPassword(EmailRequest $request)
+    {
+        try {
+            $user =User::where('email',$request->email)->first();
+            if($user) {
+                $code = mt_rand(1000, 9999);
+                $user->update([
+                    'code' => $code,
+                ]);
+                return $this->returnSuccessMessage('operation completed successfully');
+            }
+            else
+            {
+                return $this->returnError("401", 'The Email Not Found');
+            }
+
+        } catch (\Exception $ex) {
+            return $this->returnError($ex->getCode(),'Please try again later');
+        }
+    }
+
+
+    public function checkCode(CodeRequest $request)
+    {
+        try {
+            $code = $request->code;
+
+            $user = auth()->user();
+            if (isset($user)) {
+                if (!$user->code)
+                    return $this->returnError("401", 'Please request the code again');
+
+                if ($user->code != $code)
+                    return $this->returnError("403", 'The entered verification code is incorrect');
+
+                $token = JWTAuth::fromUser($user);
+                if (!$token) return $this->returnError('402', 'Unauthorized');
+
+                $user = $this->userWithToken($user, $token);
+                return $this->returnData($user, 'Logged in successfully');
+
+            } else return $this->returnError('405', 'Please try again later');
+
+        } catch (\Exception $ex) {
+            return $this->returnError($ex->getCode(), 'Please try again later');
+        }
+    }
+
+    private function userWithToken($user,$token)
+    {
+        $user->access_token = $token;
+        $user->token_type =  'bearer';
+        $user->expires_in = JWTAuth::factory()->getTTL() ;
+        return $user;
+    }
+
+
 }

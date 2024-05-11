@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateAdsRequest extends FormRequest
+class ResetPasswordRequest extends FormRequest
 {
     use GeneralTrait;
 
@@ -20,19 +20,20 @@ class UpdateAdsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>'sometimes',
-            'description'=>'string',
-            'price'=>'numeric|gt:0',
-            'number_students'=>'integer',
-            'file'=>'file',
-            'place'=>'string',
-            'date'=>'date'
+            'old_password'=>"required|string|min:6",
+            'password' => 'required|min:6|confirmed|regex:/[a-zA-Z]/'
         ];
+    }
+
+    public function messages()
+    {
+        return [];
     }
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException($this->returnValidationError('422', $validator));
+        throw new HttpResponseException($this->returnValidationError('422',$validator));
 
     }
+
 }

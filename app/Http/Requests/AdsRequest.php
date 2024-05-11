@@ -26,12 +26,13 @@ class AdsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'required|string',
+            'title'=>'required',
             'description'=>'required|string',
             'price'=>'required|numeric|gt:0',
             'number_students'=>'required|integer',
             'file'=>'required|file',
-            'place'=>'required|string'
+            'place'=>'required|string',
+            'date'=>'required|date'
         ];
     }
 

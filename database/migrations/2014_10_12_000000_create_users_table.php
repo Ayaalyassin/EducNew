@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('address');
             $table->string('governorate');
-
+            $table->string('code')->nullable();
             $table->rememberToken();
             $table->string('google_id')->nullable()->unique();
             $table->timestamps();

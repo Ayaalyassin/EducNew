@@ -20,10 +20,14 @@ class AdsController extends Controller
     public function index()
     {
         try {
-            $ads = Ads::all();
+            //$ads = Ads::all();
+            $ads=Ads::join('profile_teachers','ads.profile_teacher_id','=','profile_teachers.id')->
+            join('users','profile_teachers.user_id','=','users.id')
+            ->select('ads.*','users.name')->get();
+
             return $this->returnData($ads, 'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(), "Please try again later");
+            //return $this->returnError($ex->getCode(), "Please try again later");
         }
     }
 
@@ -67,12 +71,13 @@ class AdsController extends Controller
 
             $profile_teacher=$user->profile_teacher()->first();
             $ads =$profile_teacher->ads()->create([
-                'name' => $request->name,
+                'title' => $request->title,
                 'description' => $request->description,
                 'price' => $request->price,
                 'number_students' => $request->number_students,
                 'file' => $file,
-                'place'=>$request->place
+                'place'=>$request->place,
+                'date'=>$request->date,
             ]);
 
 
@@ -126,15 +131,17 @@ class AdsController extends Controller
 
             $file = null;
             if (isset($request->file)) {
+                $this->deleteImage($ads->file);
                 $file = $this->saveImage($request->file, $this->uploadPath);
             }
             $ads->update([
-                'name' => isset($request->name) ? $request->name : $ads->name,
+                'title' => isset($request->title) ? $request->title : $ads->title,
                 'description' => isset($request->description) ? $request->description : $ads->description,
                 'price' => isset($request->price) ? $request->price : $ads->price,
                 'number_students' => isset($request->number_students) ? $request->number_students : $ads->number_students,
                 'file' => isset($request->file) ? $file : $ads->file,
-                'place'=> isset($request->place) ? $request->place : $ads->place
+                'place'=> isset($request->place) ? $request->place : $ads->place,
+                'date'=> isset($request->date) ? $request->date : $ads->date,
             ]);
 
             DB::commit();

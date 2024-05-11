@@ -7,7 +7,6 @@ use App\Models\ProfileTeacher;
 use App\Models\TeachingMethod;
 use Illuminate\Http\Request;
 use App\Http\Requests\TeachingMethodRequest;
-use App\Models\User;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +23,7 @@ class TeachingMethodController extends Controller
             //$profile_teacher=User::find($teacher_id)->profile_teacher()->first();
             $profile_teacher=ProfileTeacher::find($teacher_id);
             if (!$profile_teacher) {
-                return $this->returnError("401",'user Not found');
+                return $this->returnError("404",'Profile Teacher Not found');
             }
             $teaching_methods=$profile_teacher->teaching_methods()->get();
             return $this->returnData($teaching_methods,'operation completed successfully');
@@ -44,6 +43,7 @@ class TeachingMethodController extends Controller
             if (!$teaching_method) {
                 return $this->returnError("401",'teaching_method Not found');
             }
+            $teaching_method->increment('views');
 
             DB::commit();
             return $this->returnData($teaching_method,'operation completed successfully');
@@ -98,6 +98,7 @@ class TeachingMethodController extends Controller
 
             $file=null;
             if (isset($request->file)) {
+                $this->deleteImage($teaching_method->file);
                 $file = $this->saveImage($request->file, $this->uploadPath);
             }
 
@@ -128,6 +129,9 @@ class TeachingMethodController extends Controller
 
             if (!$teaching_method) {
                 return $this->returnError("401",'teaching_method Not found');
+            }
+            if (isset($teaching_method->file)) {
+                $this->deleteImage($teaching_method->file);
             }
 
             $teaching_method->delete();

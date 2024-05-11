@@ -55,8 +55,13 @@ Route::get('/login/google/callback', [AuthController::class, 'handleGoogleCallba
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('forgetPassword', [AuthController::class, 'forgetPassword']);
+Route::post('checkCode', [AuthController::class, 'checkCode']);
+Route::post('changePassword', [AuthController::class, 'changePassword']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
+
+    Route::post('resetPassword', [AuthController::class, 'resetPassword']);
 
     Route::group(['middleware' => ['hasRole:teacher']], function () {
 
@@ -139,6 +144,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::group(['prefix' => 'note'], function () {
             Route::post('store', [NoteController::class, 'store'])->middleware('profileTeacher');;
             Route::delete('delete/{id}', [NoteController::class, 'destroy']);
+            Route::get('getStudentsNotes', [NoteController::class, 'index']);
         });
     });
 

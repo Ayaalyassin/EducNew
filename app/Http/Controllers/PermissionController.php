@@ -7,6 +7,7 @@ use App\Http\Requests\PermissionRequest;
 use Spatie\Permission\Models\Permission;
 use App\Traits\GeneralTrait;
 
+
 class PermissionController extends Controller
 {
     use GeneralTrait;
@@ -59,6 +60,20 @@ class PermissionController extends Controller
             $data=Permission::create([
                 'name'=>$request->name,
             ]);
+            return $this->returnData($data,'operation completed successfully');
+        } catch (\Exception $ex) {
+            return $this->returnError($ex->getCode(),'Please try again later');
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $data = Permission::find($id);
+            if (!$data)
+                return $this->returnError("401",'Not found');
+
+            $data->delete();
             return $this->returnData($data,'operation completed successfully');
         } catch (\Exception $ex) {
             return $this->returnError($ex->getCode(),'Please try again later');
