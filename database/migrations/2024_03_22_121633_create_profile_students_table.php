@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('profile_students', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
-            $table->string('educational_level');
-            $table->integer('assessing'); //درجة تحقيق وثقية الشخص
+            $table->string('phone')->unique()->nullable();
+            $table->string('educational_level')->nullable();
+            //$table->integer('assessing'); //درجة تحقيق وثقية الشخص
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 

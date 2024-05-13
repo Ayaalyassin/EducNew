@@ -19,8 +19,10 @@ class ProfileStudentAdsController extends Controller
 
         try {
             $profile_student=auth()->user()->profile_student()->first();
+            $profile_student_ads=[];
+            if($profile_student)
+                $profile_student_ads=$profile_student->profile_student_ads()->get();
 
-            $profile_student_ads=$profile_student->profile_student_ads()->get();
             return $this->returnData($profile_student_ads,'operation completed successfully');
         } catch (\Exception $ex) {
             return $this->returnError($ex->getCode(),$ex->getMessage());
@@ -45,7 +47,7 @@ class ProfileStudentAdsController extends Controller
 //            if(count($is_exist)>0)
 //                return $this->returnError("400", 'ads already exist');
 //            if ($ads->date <= now()) {
-//                return $this->returnError(401, 'The course has begun');
+//                return $this->returnError("402", 'ads has begun');
 //            }
 
             if ($ads->number_students ==0) {

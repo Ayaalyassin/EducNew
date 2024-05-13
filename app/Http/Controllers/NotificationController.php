@@ -45,6 +45,7 @@ class NotificationController extends Controller
             if (!$notification) {
                 return $this->returnError("404", 'Not found');
             }
+            $notification->update(['seen'=>1]);
             return $this->returnData($notification,'operation completed successfully');
         } catch (\Exception $ex) {
             return $this->returnError($ex->getCode(),'Please try again later');

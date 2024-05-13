@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CodeRequest extends FormRequest
+class PasswordNewRequest extends FormRequest
 {
     use GeneralTrait;
 
@@ -21,7 +21,7 @@ class CodeRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email|max:100',
-            'code' => 'required|size:4'
+            'password' => 'required|min:6|confirmed|regex:/[a-zA-Z]/'
         ];
     }
 
