@@ -6,6 +6,7 @@ use App\Traits\GeneralTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class ProfileStudentRequest extends FormRequest
 {
@@ -26,8 +27,11 @@ class ProfileStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'educational_level'=>'required|string',
-            'description'=>'required|string',
+            'educational_level'=>'sometimes|string',
+            'phone' =>
+                'sometimes|regex:/^09\d{8}$/
+                |unique:profile_students',
+
         ];
     }
 

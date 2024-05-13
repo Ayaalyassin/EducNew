@@ -25,7 +25,8 @@ class ProfileTeacherController extends Controller
             DB::beginTransaction();
 
             $profile_teacher = ProfileTeacher::where('status',1)->get();
-            $profile_teacher->loadMissing(['user','domains']);
+            if(count($profile_teacher)>0)
+                $profile_teacher->loadMissing(['user','domains']);
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
@@ -73,7 +74,7 @@ class ProfileTeacherController extends Controller
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
@@ -84,7 +85,8 @@ class ProfileTeacherController extends Controller
             DB::beginTransaction();
 
             $profile_teacher = auth()->user()->profile_teacher()->first();
-            $profile_teacher->loadMissing(['user','domains']);
+            if($profile_teacher)
+                $profile_teacher->loadMissing(['user','domains']);
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
@@ -135,6 +137,12 @@ class ProfileTeacherController extends Controller
                 'jurisdiction' => isset($request->jurisdiction) ? $request->jurisdiction : $profile_teacher->jurisdiction,
                 //'domain'=>isset($request->domain) ? $request->domain : $profile_teacher->domain,
             ]);
+            if(isset($request->image))
+            {
+                $image = $this->saveImage($request->image, $this->uploadPath);
+                $user->update(['image'=>$image]);
+                $profile_teacher->image=$image;
+            }
 
             $profile_teacher->loadMissing('domains');
             DB::commit();

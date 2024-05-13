@@ -10,10 +10,10 @@ class ProfileStudent extends Model
     use HasFactory;
 
     protected $fillable = [
-        'educational_level',
+        'phone',
         'description',
         'user_id',
-        'assessing',
+        //'assessing',
     ];
 
     public function user()

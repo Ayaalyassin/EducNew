@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CodeRequest;
 use App\Http\Requests\EmailRequest;
+use App\Http\Requests\PasswordNewRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ResetPasswordRequest;
@@ -169,11 +170,11 @@ class AuthController extends Controller
             }
             else
             {
-                return $this->returnError("401", 'The Email Not Found');
+                return $this->returnError("404", 'The Email Not Found');
             }
 
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),'Please try again later');
+            return $this->returnError("500",'Please try again later');
         }
     }
 
@@ -183,24 +184,26 @@ class AuthController extends Controller
         try {
             $code = $request->code;
 
-            $user = auth()->user();
-            if (isset($user)) {
+            $user = User::where('email',$request->email)->first();
+            if(!$user)
+                return $this->returnError('402', 'The Email Not Found');
+            //if (isset($user)) {
                 if (!$user->code)
                     return $this->returnError("401", 'Please request the code again');
 
                 if ($user->code != $code)
                     return $this->returnError("403", 'The entered verification code is incorrect');
 
-                $token = JWTAuth::fromUser($user);
-                if (!$token) return $this->returnError('402', 'Unauthorized');
+//                $token = JWTAuth::fromUser($user);
+//                if (!$token) return $this->returnError('402', 'Unauthorized');
 
-                $user = $this->userWithToken($user, $token);
-                return $this->returnData($user, 'Logged in successfully');
+//                $user = $this->userWithToken($user, $token);
+            return $this->returnSuccessMessage('operation completed successfully');
 
-            } else return $this->returnError('405', 'Please try again later');
+            //} else return $this->returnError('405', 'Please try again later');
 
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -212,5 +215,30 @@ class AuthController extends Controller
         return $user;
     }
 
+    public function passwordNew(PasswordNewRequest $request)
+    {
+        try {
+
+            $user = User::where('email', $request->email)->first();
+            if (!$user)
+                return $this->returnError('402', 'The Email Not Found');
+            if (isset($user)) {
+                $user->update([
+                    'password' => $request->password,
+                ]);
+
+                $token = JWTAuth::fromUser($user);
+                if (!$token) return $this->returnError('402', 'Unauthorized');
+
+                //$user = $this->userWithToken($user, $token);
+                $user->token=$token;
+                return $this->returnData($user, 'Logged in successfully');
+
+            } else return $this->returnError('405', 'Please try again later');
+
+        } catch (\Exception $ex) {
+            return $this->returnError("500", 'Please try again later');
+        }
+    }
 
 }

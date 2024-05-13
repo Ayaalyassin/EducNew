@@ -57,7 +57,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('forgetPassword', [AuthController::class, 'forgetPassword']);
 Route::post('checkCode', [AuthController::class, 'checkCode']);
-Route::post('changePassword', [AuthController::class, 'changePassword']);
+Route::post('passwordNew', [AuthController::class, 'passwordNew']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 

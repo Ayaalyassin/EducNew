@@ -30,7 +30,7 @@ class ProfileTeacherRequest extends FormRequest
             'description' => 'required|string',
             'jurisdiction' => 'required|string',
             //'domain' => 'required|string',
-            'domains'=>'required|array'
+            'domains'=>'required|array',
 
 
         ];

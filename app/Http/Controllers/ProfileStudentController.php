@@ -50,18 +50,16 @@ class ProfileStudentController extends Controller
 
             $user = auth()->user();
 
-            $profile_student = $user->profile_student()->create([
-                'educational_level' => isset($request->educational_level) ? $request->educational_level : null,
-                'description' => isset($request->description) ? $request->description : null,
-                'assessing' => 0
-            ]);
-
+            $profile_student=ProfileStudent::firstOrNew(['user_id'=>$user->id]);
+            $profile_student->educational_level = isset($request->educational_level) ? $request->educational_level : $profile_student->educational_level;
+            $profile_student->phone = isset($request->phone) ? $request->phone : $profile_student->phone;
+            $profile_student->save();
 
             DB::commit();
             return $this->returnData($profile_student, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
