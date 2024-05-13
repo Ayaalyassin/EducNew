@@ -19,10 +19,10 @@ class IntrestController extends Controller
     {
         try {
             $profile_student=auth()->user()->profile_student()->first();
-            if (!$profile_student) {
-                return $this->returnError("404",'user Not found');
-            }
-            $intrests=$profile_student->intrests()->get();
+            $intrests=[];
+            if (!$profile_student)
+                $intrests=$profile_student->intrests()->get();
+
             return $this->returnData($intrests,'operation completed successfully');
         } catch (\Exception $ex) {
             return $this->returnError($ex->getCode(),$ex->getMessage());
@@ -95,7 +95,7 @@ class IntrestController extends Controller
             return $this->returnData($intrest,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 

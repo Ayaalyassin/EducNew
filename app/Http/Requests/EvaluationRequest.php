@@ -26,7 +26,7 @@ class EvaluationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rate'=>'required|integer',
+            'rate'=>'required|integer|max:5',
             'teacher_id'=>'required|integer'
         ];
     }

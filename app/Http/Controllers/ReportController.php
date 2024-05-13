@@ -85,13 +85,27 @@ class ReportController extends Controller
 
             $user = auth()->user()->profile_student()->first();
 
-            $profile_teacher = ProfileTeacher::find($request->reported_id);
+            $reported_id=$request->reported_id;
+            $profile_teacher = ProfileTeacher::find($reported_id);
             if (!$profile_teacher) {
-                return $this->returnError("401",'Not found' . ' Profile Teacher Id : ' . $request->reported_id);
-
+                return $this->returnError("404",'Not found' . ' Profile Teacher Id : ' . $reported_id);
             }
 
-            $report = $user->report_as_reporter()->where('reported_id', $request->reported_id)->first();
+            $services_ids=$profile_teacher->service_teachers()->pluck('id');
+
+            $is_lock=null;
+
+            if($services_ids) {
+                $is_lock = $user->whereHas('hour_lock', function ($query) use ($services_ids) {
+                    $query->whereIn('service_id', $services_ids);
+                })->first();
+            }
+
+            if(!$is_lock)
+                return $this->returnError("401",'You Can’t do it');
+
+
+            $report = $user->report_as_reporter()->where('reported_id', $reported_id)->first();
             if ($report) {
                 $report = $user->report_as_reporter()->update([
                     'reason' => $request->reason,
@@ -101,7 +115,7 @@ class ReportController extends Controller
             else {
                 $report = $user->report_as_reporter()->create([
                     'reason' => $request->reason,
-                    'reported_id' => $request->reported_id,
+                    'reported_id' => $reported_id,
                     'reported_type' => "App\Models\ProfileTeacher",
                     'date'=>Carbon::now()->format('Y-m-d H:i:s')
                 ]);
@@ -113,7 +127,7 @@ class ReportController extends Controller
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 

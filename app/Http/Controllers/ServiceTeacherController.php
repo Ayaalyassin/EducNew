@@ -40,21 +40,33 @@ class ServiceTeacherController extends Controller
 
             $profile_teacher=auth()->user()->profile_teacher()->first();
 
-            $exist=$profile_teacher->service_teachers()->where('type',$request->type)->first();
-            if($exist)
-                return $this->returnError('500', 'the service already exist');
-
-            $service_teacher= $profile_teacher->service_teachers()->create([
-                'price' => $request->price,
-                'type' =>$request->type,
-            ]);
+//            $exist=$profile_teacher->service_teachers()->where('type',$request->type)->first();
+//            if($exist)
+//                return $this->returnError('401', 'the service already exist');
+//
+//            $service_teacher= $profile_teacher->service_teachers()->create([
+//                'price' => $request->price,
+//                'type' =>$request->type,
+//            ]);
+            $services = $request->services;
+            $list_services = [];
+            foreach ($services as $value) {
+                $service = [
+                    'profile_teacher_id' => $profile_teacher->id,
+                    'price' => $value['price'],
+                    'type' =>$value['type'],
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                array_push($list_services, $service);
+            }
+            ServiceTeacher::insert($list_services);
 
 
             DB::commit();
-            return $this->returnData($service_teacher,'operation completed successfully');
+            return $this->returnData($list_services,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 

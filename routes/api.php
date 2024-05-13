@@ -62,6 +62,8 @@ Route::post('passwordNew', [AuthController::class, 'passwordNew']);
 Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::post('resetPassword', [AuthController::class, 'resetPassword']);
+    Route::delete('deleteMyAccount', [AuthController::class, 'deleteMyAccount']);
+
 
     Route::group(['middleware' => ['hasRole:teacher']], function () {
 

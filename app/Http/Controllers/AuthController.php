@@ -241,4 +241,17 @@ class AuthController extends Controller
         }
     }
 
+    public function deleteMyAccount()
+    {
+        try {
+            $user = auth()->user();
+            if($user->image)
+                $this->deleteImage($user->image);
+            $user->delete();
+
+        } catch (\Exception $ex) {
+            return $this->returnError("500",'Please try again later');
+        }
+    }
+
 }

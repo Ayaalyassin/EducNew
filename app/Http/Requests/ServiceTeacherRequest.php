@@ -26,8 +26,9 @@ class ServiceTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price'=>'numeric|gt:0',
-            'type'=>'string'
+            'services'=>'required|array|min:1',
+            'services.*.price'=>'required|numeric|gt:0',
+            'services.*.type'=>'required|string'
         ];
     }
 
