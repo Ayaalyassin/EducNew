@@ -92,7 +92,7 @@ class ProfileTeacherController extends Controller
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 

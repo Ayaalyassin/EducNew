@@ -49,7 +49,7 @@ class ProfileStudent extends Model
 
     public function evaluation_as_student()
     {
-        return $this->hasMany(Evaluation::class, 'profile_student_id', 'id');
+        return $this->hasMany(Evaluation::class, 'student_id', 'id');
     }
 
     public function note_as_student()

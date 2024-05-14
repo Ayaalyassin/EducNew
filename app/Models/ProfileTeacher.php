@@ -19,6 +19,7 @@ class ProfileTeacher extends Model
         'assessing',
     ];
     protected $hidden = ['created_at', 'updated_at'];
+    protected $appends = ['rate'];
 
     public function user()
     {
@@ -44,7 +45,7 @@ class ProfileTeacher extends Model
 
     public function evaluation_as_teacher()
     {
-        return $this->hasMany(Evaluation::class, 'profile_teacher_id', 'id');
+        return $this->hasMany(Evaluation::class, 'teacher_id', 'id');
     }
 
 
@@ -75,5 +76,9 @@ class ProfileTeacher extends Model
     public function request_complete()
     {
         return $this->hasOne(CompleteTeacher::class, 'teacher_id', 'id');
+    }
+    public function getRateAttribute()
+    {
+        return intval($this->evaluation_as_teacher()->avg('rate'));
     }
 }
