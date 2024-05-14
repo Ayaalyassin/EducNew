@@ -22,7 +22,8 @@ class ProfileStudentController extends Controller
             DB::beginTransaction();
 
             $profile_student = ProfileStudent::all();
-            $profile_student->loadMissing(['user']);
+            if($profile_student)
+                $profile_student->loadMissing(['user']);
 
             DB::commit();
             return $this->returnData($profile_student, 'operation completed successfully');
@@ -55,6 +56,13 @@ class ProfileStudentController extends Controller
             $profile_student->phone = isset($request->phone) ? $request->phone : $profile_student->phone;
             $profile_student->save();
 
+            $name=$request->name;
+            if($name)
+            {
+                $user->update(['name'=>$name]);
+                $profile_student->name=$name;
+            }
+
             DB::commit();
             return $this->returnData($profile_student, 'operation completed successfully');
         } catch (\Exception $ex) {
@@ -73,7 +81,8 @@ class ProfileStudentController extends Controller
             DB::beginTransaction();
 
             $user = auth()->user()->profile_student()->first();
-            $user->loadMissing(['user']);
+            if($user)
+                $user->loadMissing(['user']);
 
             DB::commit();
             return $this->returnData($user, 'operation completed successfully');
@@ -92,7 +101,7 @@ class ProfileStudentController extends Controller
 
             $profile_student = ProfileStudent::find($id);
             if (!$profile_student)
-                return $this->returnError("401", 'Not found');
+                return $this->returnError("404", 'Not found');
             $profile_student->loadMissing(['user']);
 
             DB::commit();
@@ -114,28 +123,28 @@ class ProfileStudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProfileStudentRequest $request)
-    {
-        try {
-            DB::beginTransaction();
-
-            $user = auth()->user();
-
-            $profile_student = $user->profile_student()->first();
-
-            $profile_student->update([
-                'educational_level' => isset($request->educational_level) ? $request->educational_level : $profile_student->educational_level,
-                'description' => isset($request->description) ? $request->description : $profile_student->description,
-            ]);
-
-
-            DB::commit();
-            return $this->returnData($profile_student, 'operation completed successfully');
-        } catch (\Exception $ex) {
-            DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
-        }
-    }
+//    public function update(UpdateProfileStudentRequest $request)
+//    {
+//        try {
+//            DB::beginTransaction();
+//
+//            $user = auth()->user();
+//
+//            $profile_student = $user->profile_student()->first();
+//
+//            $profile_student->update([
+//                'educational_level' => isset($request->educational_level) ? $request->educational_level : $profile_student->educational_level,
+//                'description' => isset($request->description) ? $request->description : $profile_student->description,
+//            ]);
+//
+//
+//            DB::commit();
+//            return $this->returnData($profile_student, 'operation completed successfully');
+//        } catch (\Exception $ex) {
+//            DB::rollback();
+//            return $this->returnError($ex->getCode(), $ex->getMessage());
+//        }
+//    }
 
     /**
      * Remove the specified resource from storage.

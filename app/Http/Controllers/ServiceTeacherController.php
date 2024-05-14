@@ -22,7 +22,7 @@ class ServiceTeacherController extends Controller
             //$profile_teacher=User::find($teacher_id)->profile_teacher()->first();
             $profile_teacher=ProfileTeacher::find($teacher_id);
             if (!$profile_teacher) {
-                return $this->returnError("404",'user Not found');
+                return $this->returnError("404",'Profile Teacher Not found');
             }
             $service_teachers=$profile_teacher->service_teachers()->get();
             return $this->returnData($service_teachers,'operation completed successfully');
@@ -79,7 +79,7 @@ class ServiceTeacherController extends Controller
 
             $ServiceTeacher= ServiceTeacher::find($id);
             if (!$ServiceTeacher) {
-                return $this->returnError("401",'ServiceTeacher Not found');
+                return $this->returnError("404",'ServiceTeacher Not found');
             }
 
             DB::commit();

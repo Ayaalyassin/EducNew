@@ -19,11 +19,12 @@ class TeachingMethodUserController extends Controller
     {
         try {
             $profile_student=auth()->user()->profile_student()->first();
-
-            $teaching_methods_user=$profile_student->teaching_methods_user()->get();
+            $teaching_methods_user=[];
+            if($profile_student)
+                $teaching_methods_user=$profile_student->teaching_methods_user()->get();
             return $this->returnData($teaching_methods_user,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),$ex->getMessage());
+            return $this->returnError("500",$ex->getMessage());
         }
     }
 

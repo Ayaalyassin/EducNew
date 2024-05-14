@@ -55,7 +55,7 @@ class ProfileStudentAdsController extends Controller
             }
 
             if ($user->wallet->value < $ads->price)
-                return $this->returnError("500", 'not Enough money in wallet');
+                return $this->returnError("403", 'not Enough money in wallet');
             $user->wallet->update([
                 'value' => $user->wallet->value - $ads->price
             ]);

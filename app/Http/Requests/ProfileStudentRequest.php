@@ -31,6 +31,7 @@ class ProfileStudentRequest extends FormRequest
             'phone' =>
                 'sometimes|regex:/^09\d{8}$/
                 |unique:profile_students',
+            'name'=>'sometimes|string',
 
         ];
     }

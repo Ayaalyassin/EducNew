@@ -38,6 +38,8 @@ class AdsController extends Controller
 //            $profile_teacher=$user->profile_teacher()->first();
 //            $ads=$profile_teacher->ads()->get();
             $profile_teacher = ProfileTeacher::find($teacherId);
+            if(!$profile_teacher)
+                return $this->returnError("404", "Not found");
             $ads=$profile_teacher->ads()->get();
 
 

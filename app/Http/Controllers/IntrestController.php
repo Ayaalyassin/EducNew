@@ -20,7 +20,7 @@ class IntrestController extends Controller
         try {
             $profile_student=auth()->user()->profile_student()->first();
             $intrests=[];
-            if (!$profile_student)
+            if ($profile_student)
                 $intrests=$profile_student->intrests()->get();
 
             return $this->returnData($intrests,'operation completed successfully');
