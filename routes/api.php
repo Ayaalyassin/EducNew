@@ -181,7 +181,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::group(['middleware' => ['hasRole:teacher']], function () {
 
         Route::group(['prefix' => 'ServiceTeacher'], function () {
-            Route::post('store', [ServiceTeacherController::class, 'store'])->middleware('profileTeacher');;
+            Route::post('store', [ServiceTeacherController::class, 'store']);//->middleware('profileTeacher');;
             Route::post('update/{id}', [ServiceTeacherController::class, 'update']);
             Route::delete('delete/{id}', [ServiceTeacherController::class, 'destroy']);
             Route::get('getMyService', [ServiceTeacherController::class, 'getMyService']);
