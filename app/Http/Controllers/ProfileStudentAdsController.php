@@ -46,9 +46,9 @@ class ProfileStudentAdsController extends Controller
 //            $is_exist=$profile_student->profile_student_ads()->where('ads_id',$request->ads_id)->get();
 //            if(count($is_exist)>0)
 //                return $this->returnError("400", 'ads already exist');
-//            if ($ads->date <= now()) {
-//                return $this->returnError("402", 'ads has begun');
-//            }
+            if ($ads->date <= now()) {
+                return $this->returnError("402", 'ads has begun');
+            }
 
             if ($ads->number_students ==0) {
                 return $this->returnError("401", 'The number is complete');

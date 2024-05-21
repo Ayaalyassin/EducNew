@@ -38,7 +38,7 @@ class RoleController extends Controller
             DB::beginTransaction();
             $data = Role::find($id);
             if (!$data)
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
 
             $permissions_id = $request->permissions_id;
             $permissions = Permission::whereIn('id', $permissions_id)->get();
@@ -61,7 +61,7 @@ class RoleController extends Controller
         try {
             $data = Role::find($id);
             if (!$data)
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
 
             $data->delete();
             return $this->returnData($data,'operation completed successfully');
@@ -86,7 +86,7 @@ class RoleController extends Controller
         try {
             $data = Role::find($id);
             if (!$data)
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
 
             return $this->returnData($data,'operation completed successfully');
         } catch (\Exception $ex) {

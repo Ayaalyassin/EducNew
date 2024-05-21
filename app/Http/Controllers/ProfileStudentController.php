@@ -13,9 +13,8 @@ use Illuminate\Support\Facades\DB;
 class ProfileStudentController extends Controller
 {
     use GeneralTrait;
-    /**
-     * Display a listing of the resource.
-     */
+
+
     public function getAll()
     {
         try {
@@ -33,17 +32,7 @@ class ProfileStudentController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(ProfileStudentRequest $request)
     {
         try {
@@ -71,9 +60,7 @@ class ProfileStudentController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show()
     {
 
@@ -112,43 +99,7 @@ class ProfileStudentController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProfileStudent $profileStudent)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-//    public function update(UpdateProfileStudentRequest $request)
-//    {
-//        try {
-//            DB::beginTransaction();
-//
-//            $user = auth()->user();
-//
-//            $profile_student = $user->profile_student()->first();
-//
-//            $profile_student->update([
-//                'educational_level' => isset($request->educational_level) ? $request->educational_level : $profile_student->educational_level,
-//                'description' => isset($request->description) ? $request->description : $profile_student->description,
-//            ]);
-//
-//
-//            DB::commit();
-//            return $this->returnData($profile_student, 'operation completed successfully');
-//        } catch (\Exception $ex) {
-//            DB::rollback();
-//            return $this->returnError($ex->getCode(), $ex->getMessage());
-//        }
-//    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy()
     {
         try {

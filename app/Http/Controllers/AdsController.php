@@ -23,7 +23,7 @@ class AdsController extends Controller
             //$ads = Ads::all();
             $ads=Ads::join('profile_teachers','ads.profile_teacher_id','=','profile_teachers.id')->
             join('users','profile_teachers.user_id','=','users.id')
-            ->select('ads.*','users.name')->get();
+            ->select('ads.*','users.name')->orderBy('created_at','desc')->get();
 
             return $this->returnData($ads, 'operation completed successfully');
         } catch (\Exception $ex) {
@@ -40,7 +40,7 @@ class AdsController extends Controller
             $profile_teacher = ProfileTeacher::find($teacherId);
             if(!$profile_teacher)
                 return $this->returnError("404", "Not found");
-            $ads=$profile_teacher->ads()->get();
+            $ads=$profile_teacher->ads()->orderBy('created_at','desc')->get();
 
 
             return $this->returnData($ads, 'operation completed successfully');
@@ -49,17 +49,7 @@ class AdsController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(AdsRequest $request)
     {
         try {
@@ -91,9 +81,7 @@ class AdsController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
 
     public function getById($id)
     {
@@ -108,17 +96,8 @@ class AdsController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ads $ads)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateAdsRequest $request, $id)
     {
         try {
@@ -154,9 +133,8 @@ class AdsController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
+
     public function destroy($id)
     {
         try {

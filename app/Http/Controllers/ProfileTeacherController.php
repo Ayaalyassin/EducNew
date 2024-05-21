@@ -135,16 +135,30 @@ class ProfileTeacherController extends Controller
                 'certificate' => isset($request->certificate) ? $certificate : $profile_teacher->certificate,
                 'description' => isset($request->description) ? $request->description : $profile_teacher->description,
                 'jurisdiction' => isset($request->jurisdiction) ? $request->jurisdiction : $profile_teacher->jurisdiction,
-                //'domain'=>isset($request->domain) ? $request->domain : $profile_teacher->domain,
             ]);
+
+            $image=null;
             if(isset($request->image))
             {
                 $image = $this->saveImage($request->image, $this->uploadPath);
-                $user->update(['image'=>$image]);
-                $profile_teacher->image=$image;
+            }
+            $user->update([
+                'address'=>isset($request->address) ? $request->address : $user->address,
+                'governorate'=>isset($request->governorate) ? $request->governorate : $user->governorate,
+                'image'=>isset($request->image) ? $image: $user->image
+            ]);
+
+
+            $domains=isset($request->domains)?$request->domains:[];
+            if(count($domains)>0) {
+                foreach ($domains as $domain) {
+                    $item = $profile_teacher->domains()->firstOrNew(['id' => $domain['id']]);
+                    $item->type = $domain['type'];
+                    $item->save();
+                }
             }
 
-            $profile_teacher->loadMissing('domains');
+            $profile_teacher->loadMissing(['domains','user']);
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {

@@ -146,7 +146,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::group(['prefix' => 'note'], function () {
             Route::post('store', [NoteController::class, 'store'])->middleware('profileTeacher');;
             Route::delete('delete/{id}', [NoteController::class, 'destroy']);
-            Route::get('getStudentsNotes', [NoteController::class, 'index']);
+            Route::get('getStudentsNotes', [NoteController::class, 'index'])->middleware('hasRole:teacher');
         });
     });
 

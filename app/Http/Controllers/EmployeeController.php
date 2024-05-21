@@ -52,7 +52,7 @@ class EmployeeController extends Controller
             DB::beginTransaction();
             $data=User::where('id',$id)->first();
             if (!$data) {
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
             }
 
             $image=null;
@@ -85,7 +85,7 @@ class EmployeeController extends Controller
                 $query->where('name',"employee");
             })->first();
             if (!$data) {
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
             }
             $data->loadMissing(['roles']);
             return $this->returnData($data,'operation completed successfully');
@@ -103,7 +103,7 @@ class EmployeeController extends Controller
         try {
             $data=User::where('id',$id)->first();
             if (!$data) {
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
             }
             $data->delete();
             return $this->returnSuccessMessage('operation completed successfully');

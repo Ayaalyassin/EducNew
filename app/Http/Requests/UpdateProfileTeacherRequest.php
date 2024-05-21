@@ -29,8 +29,12 @@ class UpdateProfileTeacherRequest extends FormRequest
             'certificate' => 'sometimes|image|mimes:jpeg,jpg,png,gif',
             'description' => 'sometimes|string',
             'jurisdiction' => 'sometimes|string',
-            //'domain' => 'sometimes|string',
             'image' => 'sometimes|image|mimes:jpeg,jpg,png,gif',
+            'address'=>'sometimes|string',
+            'governorate'=>'sometimes|string',
+            'domains'=>'sometimes|array',
+            'domains.*.id'=>'sometimes|integer',
+            'domains.*.type'=>'sometimes|string',
         ];
     }
 

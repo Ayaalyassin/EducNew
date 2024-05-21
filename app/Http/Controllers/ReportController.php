@@ -15,9 +15,7 @@ use App\Models\User;
 class ReportController extends Controller
 {
     use GeneralTrait;
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         try {
@@ -27,7 +25,7 @@ class ReportController extends Controller
 
             }])->with(['reported' => function ($q) {
                 //$q->select('id', 'name');
-            }])->get();
+            }])->orderBy('created_at','desc')->get();
 
             DB::commit();
             return $this->returnData($reports,'operation completed successfully');
