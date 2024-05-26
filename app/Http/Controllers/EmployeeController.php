@@ -26,7 +26,7 @@ class EmployeeController extends Controller
             }
 
             $data=User::create([
-                'name'           => $request->name,
+                'name'           => $request->name,//
                 'email'          => $request->email,
                 'password'       => $request->password,
                 'address'         => $request->address,

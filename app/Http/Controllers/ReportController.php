@@ -45,7 +45,7 @@ class ReportController extends Controller
 
             $profile_student = ProfileStudent::find($request->reported_id);
             if (!$profile_student) {
-                return $this->returnError("401", 'Not found' . ' Profile student Id : ' . $request->reported_id);
+                return $this->returnError("404", 'Not found' . ' Profile student Id : ' . $request->reported_id);
 
             }
 

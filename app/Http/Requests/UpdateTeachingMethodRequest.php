@@ -31,7 +31,7 @@ class UpdateTeachingMethodRequest extends FormRequest
             'description'=>'string',
             'file'=>'file',
             'status'=>'boolean',
-            'price'=>'numeric|gt:0'
+            'price'=>'numeric|min:0'
         ];
     }
 

@@ -58,6 +58,9 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('forgetPassword', [AuthController::class, 'forgetPassword']);
 Route::post('checkCode', [AuthController::class, 'checkCode']);
 Route::post('passwordNew', [AuthController::class, 'passwordNew']);
+Route::post('login_admin', [AuthController::class, 'login_admin']);
+Route::post('codeAdmin', [AuthController::class, 'codeAdmin']);
+
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 

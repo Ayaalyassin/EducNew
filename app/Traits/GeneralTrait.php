@@ -2,7 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Http;
 
 trait GeneralTrait
 {
@@ -140,6 +142,40 @@ trait GeneralTrait
         }
     }
 
+
+//    public function sendNotification($user_id,$message,$title)
+//    {
+//        $SERVER_KEY=env('FCM_SERVER_KEY');
+//        $user=User::find($user_id);
+//        $fcm=Http::acceptJson()->withToken($SERVER_KEY)
+//            ->post('https://fcm.googleapis.com/fcm/send',
+//            [
+//                'to'=>$user->fcm_token,
+//                'notification'=>
+//                [
+//                    'title'=>$title,
+//                    'body'=>$message
+//                ]
+//            ]);
+//        return json_decode($fcm);
+//    }
+
+//    public function sendNotificationMulti($user_ids,$message,$title)
+//    {
+//        $SERVER_KEY=env('FCM_SERVER_KEY');
+//        $fcm_tokens=User::find($user_ids)->pluck('fcm_token);
+//        $fcm=Http::acceptJson()->withToken($SERVER_KEY)
+//            ->post('https://fcm.googleapis.com/fcm/send',
+//            [
+//                'registration_ids'=>$fcm_tokens,
+//                'notification'=>
+//                [
+//                    'title'=>$title,
+//                    'body'=>$message
+//                ]
+//            ]);
+//        return json_decode($fcm);
+//    }
 
 
 }

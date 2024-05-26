@@ -19,12 +19,12 @@ class ProfileTeacherController extends Controller
     private $uploadPath = "assets/images/profile_teachers";
 
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             DB::beginTransaction();
 
-            $profile_teacher = ProfileTeacher::where('status',1)->get();
+            $profile_teacher = ProfileTeacher::where('status',1)->filter($request)->get();
             if(count($profile_teacher)>0)
                 $profile_teacher->loadMissing(['user','domains']);
 

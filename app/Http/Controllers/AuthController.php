@@ -8,11 +8,13 @@ use App\Http\Requests\PasswordNewRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Mail\CodeEmail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Traits\GeneralTrait;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -78,14 +80,56 @@ class AuthController extends Controller
     {
         $credentials = $request->only(['email', 'password']);
         $token = JWTAuth::attempt($credentials);
+        $exist=User::where('email',$request->email)->first();
+        if($exist && !$token)
+            return $this->returnError(400,'The password is wrong');
 
         if (!$token)
-            return $this->returnError("401", 'Unauthorized');
+            return $this->returnError(404, 'Account Not found');
 
-        $user = auth()->user();
-        $user->token = $token;
+        $code = mt_rand(1000, 9999);
+        $exist->update([
+            'code' => $code,
+        ]);
+        $mailData = [
 
-        return $this->returnData($user, 'operation completed successfully');
+            'title' => 'Code login',
+
+            'code' => $code
+
+        ];
+        //Mail::to($exist->email)->send(new CodeEmail($mailData));
+
+        return $this->returnSuccessMessage('code send successfully');
+    }
+
+
+    public function codeAdmin(CodeRequest $request)
+    {
+        try {
+            $code = $request->code;
+
+            $user = User::where('email', $request->email)->first();
+            if (!$user)
+                return $this->returnError('402', 'The Email Not Found');
+
+            if (!$user->code)
+                return $this->returnError("401", 'Please request the code again');
+
+            if ($user->code != $code)
+                return $this->returnError("403", 'The entered verification code is incorrect');
+
+                $token = JWTAuth::fromUser($user);
+                if (!$token) return $this->returnError('402', 'Unauthorized');
+                $user->token=$token;
+
+            return $this->returnData($user, 'operation completed successfully');
+
+
+        } catch (\Exception $ex) {
+            return $this->returnError("500", 'Please try again later');
+        }
+
     }
 
     public function register(RegisterRequest $request)
@@ -253,5 +297,22 @@ class AuthController extends Controller
             return $this->returnError("500",'Please try again later');
         }
     }
+
+//    public function refreshToken(Request $request)
+//    {
+//        try {
+//            $user_id = $request->user_id;
+//            $fcm_token = $request->fcm_token;
+//            $user = User::find($user_id);
+//            $user->update([
+//                'fcm_token' => $fcm_token
+//            ]);
+//            return $user;
+//        }
+//        catch (\Exception $e)
+//        {
+//            return $this->returnError("500",'Please try again later');
+//        }
+//    }
 
 }

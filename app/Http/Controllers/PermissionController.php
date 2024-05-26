@@ -27,7 +27,7 @@ class PermissionController extends Controller
         try {
             $data = Permission::find($id);
             if (!$data)
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
 
             return $this->returnData($data,'operation completed successfully');
         } catch (\Exception $ex) {
@@ -41,7 +41,7 @@ class PermissionController extends Controller
         try {
             $data = Permission::find($id);
             if (!$data)
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
 
             $data->update([
                 'name'=>$request->name,
@@ -71,7 +71,7 @@ class PermissionController extends Controller
         try {
             $data = Permission::find($id);
             if (!$data)
-                return $this->returnError("401",'Not found');
+                return $this->returnError("404",'Not found');
 
             $data->delete();
             return $this->returnData($data,'operation completed successfully');

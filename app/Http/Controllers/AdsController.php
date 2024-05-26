@@ -86,7 +86,14 @@ class AdsController extends Controller
     public function getById($id)
     {
         try {
-            $data = Ads::where('id', $id)->first();
+            $data = Ads::where('id', $id)
+//->with('profile_students',function ($query){
+//                $query->select('phone');
+//            })->with('profile_students.user',function ($q){
+//                $q->select('name','governorate');
+//            })
+                ->first();
+            $data->loadMissing(['profile_students.user']);
             if (!$data) {
                 return $this->returnError("404", "Not found");
             }
