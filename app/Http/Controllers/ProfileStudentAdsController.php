@@ -64,6 +64,8 @@ class ProfileStudentAdsController extends Controller
                 $request->ads_id
             ]);
             $ads->decrement('number_students');
+            if($ads->number_students==0)
+                $ads->update(['active'=>0]);
             $profile_student->loadMissing(['profile_student_ads']);
 
             DB::commit();

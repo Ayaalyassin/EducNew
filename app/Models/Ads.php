@@ -20,6 +20,7 @@ class Ads extends Model
         'place',//
         'date',//
         //'offer'
+        'active'
     ];
 
     public function profile_teacher()
