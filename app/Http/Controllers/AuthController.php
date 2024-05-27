@@ -134,18 +134,14 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $image = null;
-        if (isset($request->image)) {
-            $image = $this->saveImage($request->image, $this->uploadPath);
-        }
+
         $user = User::create([
             'name'           => $request->name,
             'email'          => $request->email,
             'password'       => $request->password,
             'address'         => $request->address,
             'governorate'    => $request->governorate,
-            'birth_date'     => $request->birth_date,
-            'image'          => $image,
+            'birth_date'     => $request->birth_date
         ]);
 
         $credentials = ['email' => $user->email, 'password' => $request->password];

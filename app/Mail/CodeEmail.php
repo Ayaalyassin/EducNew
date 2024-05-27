@@ -38,7 +38,10 @@ class CodeEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.CodeMail',
+            view: 'CodeMail',
+            with:[
+                'mailData'=>$this->mailData
+            ]
         );
     }
 

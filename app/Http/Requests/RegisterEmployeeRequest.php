@@ -29,10 +29,9 @@ class RegisterEmployeeRequest extends FormRequest
             'name' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6',
-            'adress'=>'required|string',
+            'address'=>'required|string',
             'governorate'=>'required|string',
             'birth_date'=>'required|date',
-            'image'=>'sometimes|image|mimes:jpeg,jpg,png,gif',
         ];
     }
     public function failedValidation(Validator $validator)

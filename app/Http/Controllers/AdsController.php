@@ -60,6 +60,7 @@ class AdsController extends Controller
             if (isset($request->file)) {
                 $file = $this->saveImage($request->file, $this->uploadPath);
             }
+            $date=new \DateTime($request->date);
 
             $profile_teacher=$user->profile_teacher()->first();
             $ads =$profile_teacher->ads()->create([
@@ -69,7 +70,7 @@ class AdsController extends Controller
                 'number_students' => $request->number_students,
                 'file' => $file,
                 'place'=>$request->place,
-                'date'=>$request->date,
+                'date'=>$date,
             ]);
 
 

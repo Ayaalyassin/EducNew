@@ -29,7 +29,6 @@ class User extends Authenticatable implements JWTSubject
         'address',
         'governorate',
         'birth_date',
-        'image',
         'google_id',
         'code',
         'fcm_token'

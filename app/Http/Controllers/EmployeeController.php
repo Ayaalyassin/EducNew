@@ -20,11 +20,6 @@ class EmployeeController extends Controller
         try {
             DB::beginTransaction();
 
-            $image=null;
-            if (isset($request->image)) {
-                $image = $this->saveImage($request->image, $this->uploadPath);
-            }
-
             $data=User::create([
                 'name'           => $request->name,//
                 'email'          => $request->email,
@@ -32,7 +27,6 @@ class EmployeeController extends Controller
                 'address'         => $request->address,
                 'governorate'    => $request->governorate,
                 'birth_date'     =>$request->birth_date,
-                'image'          =>$image
             ]);
             $role=Role::where('name','employee')->first();
             $data->assignRole($role);
@@ -41,7 +35,7 @@ class EmployeeController extends Controller
         }
         catch (\Exception $ex) {
             DB::rollBack();
-            return $this->returnError($ex->getCode(),$ex->getMessage());
+            return $this->returnError("500",$ex->getMessage());
 
         }
     }
@@ -55,10 +49,6 @@ class EmployeeController extends Controller
                 return $this->returnError("404",'Not found');
             }
 
-            $image=null;
-            if (isset($request->image)) {
-                $image = $this->saveImage($request->image, $this->uploadPath);
-            }
 
             $data->update([
                 'name'           => isset($request->name)? $request->name :$data->name,
@@ -66,14 +56,13 @@ class EmployeeController extends Controller
                 'password'       => isset($request->password)? $request->password :$data->password,
                 'address'         => isset($request->address)? $request->address :$data->address,
                 'governorate'    => isset($request->governorate)? $request->governorate :$data->governorate,
-                'image'          => isset($request->image)? $image :$data->image,
                 'birth_date'     => isset($request->birth_date)? $request->birth_date :$data->birth_date,
             ]);
             DB::commit();
             return $this->returnData($data,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollBack();
-            return $this->returnError($ex->getCode(),'Please try again later');
+            return $this->returnError("500",'Please try again later');
 
         }
     }

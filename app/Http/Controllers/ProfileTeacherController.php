@@ -130,18 +130,19 @@ class ProfileTeacherController extends Controller
             }
 
             $profile_teacher = $user->profile_teacher()->first();
-
-            $profile_teacher->update([
-                'certificate' => isset($request->certificate) ? $certificate : $profile_teacher->certificate,
-                'description' => isset($request->description) ? $request->description : $profile_teacher->description,
-                'jurisdiction' => isset($request->jurisdiction) ? $request->jurisdiction : $profile_teacher->jurisdiction,
-            ]);
-
             $image=null;
             if(isset($request->image))
             {
                 $image = $this->saveImage($request->image, $this->uploadPath);
             }
+
+            $profile_teacher->update([
+                'certificate' => isset($request->certificate) ? $certificate : $profile_teacher->certificate,
+                'description' => isset($request->description) ? $request->description : $profile_teacher->description,
+                'jurisdiction'=> isset($request->jurisdiction) ? $request->jurisdiction : $profile_teacher->jurisdiction,
+                'image'       => isset($request->image) ? $image : $profile_teacher->image
+            ]);
+
             $user->update([
                 'address'=>isset($request->address) ? $request->address : $user->address,
                 'governorate'=>isset($request->governorate) ? $request->governorate : $user->governorate,

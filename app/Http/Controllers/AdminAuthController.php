@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CodeRequest;
 use App\Http\Requests\LoginRequest;
 use App\Jobs\DeleteCodeJob;
+use App\Jobs\sendCodeEmailJob;
 use App\Models\User;
 use App\Traits\GeneralTrait;
 use Carbon\Carbon;
@@ -37,8 +38,10 @@ class AdminAuthController extends Controller
             'code' => $code
         ];
         //Mail::to($exist->email)->send(new CodeEmail($mailData));
-        $job=(new DeleteCodeJob($exist))->delay(Carbon::now()->addMinutes(2));
-        $this->dispatch($job);
+//        $job=(new sendCodeEmailJob($mailData,$exist));
+//        $this->dispatch($job);
+//        $job=(new DeleteCodeJob($exist))->delay(Carbon::now()->addMinutes(2));
+//        $this->dispatch($job);
 
         return $this->returnSuccessMessage('code send successfully');
     }

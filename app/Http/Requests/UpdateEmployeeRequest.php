@@ -29,10 +29,9 @@ class UpdateEmployeeRequest extends FormRequest
             'name' => 'sometimes|string|between:2,100',
             'email' => 'sometimes|string|email|max:100|unique:users',
             'password' => 'sometimes|string|min:6',
-            'adress'=>'sometimes|string',
+            'address'=>'sometimes|string',
             'governorate'=>'sometimes|string',
             'birth_date'=>'date',
-            'image'=>'sometimes|image|mimes:jpeg,jpg,png,gif',
         ];
     }
     public function failedValidation(Validator $validator)

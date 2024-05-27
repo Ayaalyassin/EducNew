@@ -32,7 +32,6 @@ class RegisterRequest extends FormRequest
             'address' => 'required|string',
             'governorate' => 'required|string',
             'birth_date' => 'required|date',
-            'image' => 'sometimes|image|mimes:jpeg,jpg,png,gif',
             'role_id' => 'required|integer'
         ];
     }
