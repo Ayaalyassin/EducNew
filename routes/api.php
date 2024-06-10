@@ -117,6 +117,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::group(['prefix' => 'ads'], function () {
             Route::get('getAll', [AdsController::class, 'index']);
             Route::get('getAdsTeacher/{id}', [AdsController::class, 'getAdsTeacher']);
+            Route::get('getSimilar', [AdsController::class, 'getSimilar']);
         });
     });
 

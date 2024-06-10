@@ -29,7 +29,7 @@ class AdminAuthController extends Controller
         if (!$token)
             return $this->returnError(404, 'Account Not found');
 
-        $code = mt_rand(1000, 9999);
+        $code=mt_rand(0, 999999);
         $exist->update([
             'code' => $code,
         ]);

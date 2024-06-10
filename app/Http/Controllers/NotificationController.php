@@ -14,7 +14,7 @@ class NotificationController extends Controller
     public function getAll(){
         try {
             $user = auth('api')->user();
-            $notifications=$user->notifications()->get();
+            $notifications=$user->notifications()->orderBy('created_at','desc')->get();
             return $this->returnData($notifications,'operation completed successfully');
         } catch (\Exception $ex) {
             return $this->returnError($ex->getCode(), 'Please try again later');

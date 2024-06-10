@@ -17,13 +17,22 @@ class AdsController extends Controller
 
     private $uploadPath = "assets/images/ads";
 
+    public function getSimilar()
+    {
+        $user=auth()->user();
+        $desiredData=Ads::whereRaw("INSTR(place, ?) > 0", [$user->governorate])->get();
+
+        return $this->returnData($desiredData, 'operation completed successfully');
+    }
+
     public function index()
     {
         try {
             //$ads = Ads::all();
             $ads=Ads::join('profile_teachers','ads.profile_teacher_id','=','profile_teachers.id')->
             join('users','profile_teachers.user_id','=','users.id')
-            ->select('ads.*','users.name')->orderBy('created_at','desc')->get();
+            ->select('ads.*','users.name')//->orderBy('created_at','desc')
+            ->get();
 
             return $this->returnData($ads, 'operation completed successfully');
         } catch (\Exception $ex) {
@@ -94,10 +103,10 @@ class AdsController extends Controller
 //                $q->select('name','governorate');
 //            })
                 ->first();
-            $data->loadMissing(['profile_students.user']);
             if (!$data) {
                 return $this->returnError("404", "Not found");
             }
+            $data->loadMissing(['profile_students.user']);
             return $this->returnData($data, 'operation completed successfully');
         } catch (\Exception $ex) {
             return $this->returnError("500", 'Please try again later');
@@ -130,7 +139,7 @@ class AdsController extends Controller
                 'number_students' => isset($request->number_students) ? $request->number_students : $ads->number_students,
                 'file' => isset($request->file) ? $file : $ads->file,
                 'place'=> isset($request->place) ? $request->place : $ads->place,
-                'date'=> isset($request->date) ? $request->date : $ads->date,
+                'date'=> isset($request->date) ? new \DateTime($request->date) : $ads->date,
             ]);
 
             DB::commit();

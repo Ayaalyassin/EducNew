@@ -9,6 +9,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Mail\CodeEmail;
+use App\Mail\ForgetPasswordMail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Wallet;
@@ -87,7 +88,7 @@ class AuthController extends Controller
         if (!$token)
             return $this->returnError(404, 'Account Not found');
 
-        $code = mt_rand(1000, 9999);
+        $code=mt_rand(0, 999999);
         $exist->update([
             'code' => $code,
         ]);
@@ -203,9 +204,15 @@ class AuthController extends Controller
             $user =User::where('email',$request->email)->first();
             if($user) {
                 $code = mt_rand(1000, 9999);
+                //$code=mt_rand(0, 999999);
                 $user->update([
                     'code' => $code,
                 ]);
+                $mailData = [
+                    'title' => 'Forget Password Email',
+                    'code' => $code
+                ];
+                //Mail::to($user->email)->send(new ForgetPasswordMail($mailData));
                 return $this->returnSuccessMessage('operation completed successfully');
             }
             else

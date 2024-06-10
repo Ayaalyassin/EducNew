@@ -21,7 +21,7 @@ class ProfileStudentController extends Controller
             DB::beginTransaction();
 
             $profile_student = ProfileStudent::all();
-            if($profile_student)
+            if(count($profile_student)>0)
                 $profile_student->loadMissing(['user']);
 
             DB::commit();
