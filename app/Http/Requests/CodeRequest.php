@@ -21,7 +21,7 @@ class CodeRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email|max:100',
-            'code' => 'required|size:4'
+            'code' => 'required|size:6'
         ];
     }
 
