@@ -17,7 +17,8 @@ return new class extends Migration
                 ->references('id')->on('profile_teachers')
                 ->onDelete('cascade');
             $table->string('cv')->nullable();
-            $table->string('self_identity')->nullable();
+            // $table->string('self_identity')->nullable();
+            $table->binary('self_identity')->nullable();
             $table->string('phone')->nullable();
             $table->integer('status');
             $table->timestamps();

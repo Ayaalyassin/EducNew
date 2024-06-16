@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('certificate'); // صورة الشهادة
+            $table->binary('certificate'); // صورة الشهادة
             $table->string('description');
             $table->string('jurisdiction'); //الاختصاص من المفاضلة
             //$table->string('domain');  // مجال العمل
-            $table->boolean('status');// الاستاذ مقبول في المنصة أو قيد الانتظار
+            $table->boolean('status'); // الاستاذ مقبول في المنصة أو قيد الانتظار
             $table->integer('assessing'); //درجة تحقيق وثقية الشخص
             $table->timestamps();
         });

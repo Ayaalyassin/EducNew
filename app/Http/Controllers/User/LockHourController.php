@@ -66,12 +66,7 @@ class LockHourController extends Controller
                     return $this->returnError(400, 'already request hour lock');
                 }
             }
-
-
-            // return $this->returnData($student->hour_lock, 'operation completed successfully');
-
             $hours = CalendarHour::find($request->hour_id)->day->teacher->service_teachers;
-
             if (!CalendarHour::find($request->hour_id)) {
                 return $this->returnError(404, 'The Hour Not Found');
             }

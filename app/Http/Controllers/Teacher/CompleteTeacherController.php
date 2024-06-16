@@ -8,6 +8,7 @@ use App\Models\CompleteTeacher;
 use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class CompleteTeacherController extends Controller
 {
@@ -57,6 +58,9 @@ class CompleteTeacherController extends Controller
             if (isset($request->self_identity)) {
                 $self_identity = $this->saveImage($request->self_identity, $this->uploadPath);
             }
+            //
+            $encryptedImage = Crypt::encrypt(file_get_contents($self_identity));
+            //
             $cv = null;
             if (isset($request->cv)) {
                 $cv = $this->saveAnyFile($request->cv, $this->uploadPath);
@@ -71,7 +75,7 @@ class CompleteTeacherController extends Controller
             }
             $requestComplete = $user->request_complete()->create([
                 'cv' => $cv,
-                'self_identity' => $self_identity,
+                'self_identity' => $encryptedImage, //$self_identity,
                 'phone' => isset($request->phone) ? $request->phone : null,
                 'status' => 0
             ]);

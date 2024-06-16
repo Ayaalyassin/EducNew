@@ -176,6 +176,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
             Route::get('getAll', [RoleController::class, 'getAll']);
             Route::get('getById/{id}', [RoleController::class, 'getById']);
         });
+        Route::post('searchName', [AdminController::class, 'searchByName']);
+        Route::post('searchAddress', [AdminController::class, 'searchByAddress']);
     });
 
     Route::group(['middleware' => ['hasRole:teacher']], function () {
@@ -290,6 +292,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::group(['middleware' => ['hasRole:teacher']], function () {
             Route::post('store', [CalendarController::class, 'store']);
             Route::get('get', [CalendarController::class, 'index']);
+            Route::post('update', [CalendarController::class, 'update']);
             Route::get('accept-request/{id}', [LockHourController::class, 'accept_request']);
             Route::get('user_lock', [LockHourController::class, 'index']);
             Route::delete('delete/{id}', [LockHourController::class, 'destroy']);
@@ -325,4 +328,3 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::delete("{id}", [NotificationController::class, 'delete']);
     });
 });
-

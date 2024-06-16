@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ProfileTeacherRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Crypt;
 
 class ProfileTeacherController extends Controller
 {
@@ -23,11 +24,15 @@ class ProfileTeacherController extends Controller
     {
         try {
             DB::beginTransaction();
-
-            $profile_teacher = ProfileTeacher::where('status',1)->get();
-            if(count($profile_teacher)>0)
-                $profile_teacher->loadMissing(['user','domains']);
-
+            // $profile_teacher = ProfileTeacher::where('status', 1)
+            //     ->get();
+            // if (count($profile_teacher) > 0)
+            //     $profile_teacher->loadMissing(['user', 'domains']);
+            $userAddress = auth()->user()->address;
+            $profile_teacher =  ProfileTeacher::where('status', 1)
+                ->with(['user', 'domains'])
+                ->orderBy('user.address')
+                ->get();
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
@@ -48,8 +53,11 @@ class ProfileTeacherController extends Controller
             if (isset($request->certificate)) {
                 $certificate = $this->saveImage($request->certificate, $this->uploadPath);
             }
+            //
+            $encryptedImage = Crypt::encrypt(file_get_contents($certificate));
+            //
             $profile_teacher = $user->profile_teacher()->create([
-                'certificate' => $certificate,
+                'certificate' => $encryptedImage, //$certificate
                 'description' => isset($request->description) ? $request->description : null,
                 'jurisdiction' => isset($request->jurisdiction) ? $request->jurisdiction : null,
                 //'domain' => isset($request->domain) ? $request->domain : null,
@@ -85,8 +93,8 @@ class ProfileTeacherController extends Controller
             DB::beginTransaction();
 
             $profile_teacher = auth()->user()->profile_teacher()->first();
-            if($profile_teacher)
-                $profile_teacher->loadMissing(['user','domains']);
+            if ($profile_teacher)
+                $profile_teacher->loadMissing(['user', 'domains']);
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
@@ -104,9 +112,9 @@ class ProfileTeacherController extends Controller
             $profile_teacher = ProfileTeacher::find($id);
             if (!$profile_teacher)
                 return $this->returnError("401", 'Not found');
-            $profile_teacher->loadMissing(['user','domains']);
-
+            $profile_teacher->loadMissing(['user', 'domains']);
             DB::commit();
+
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
@@ -137,11 +145,10 @@ class ProfileTeacherController extends Controller
                 'jurisdiction' => isset($request->jurisdiction) ? $request->jurisdiction : $profile_teacher->jurisdiction,
                 //'domain'=>isset($request->domain) ? $request->domain : $profile_teacher->domain,
             ]);
-            if(isset($request->image))
-            {
+            if (isset($request->image)) {
                 $image = $this->saveImage($request->image, $this->uploadPath);
-                $user->update(['image'=>$image]);
-                $profile_teacher->image=$image;
+                $user->update(['image' => $image]);
+                $profile_teacher->image = $image;
             }
 
             $profile_teacher->loadMissing('domains');
