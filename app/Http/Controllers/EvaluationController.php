@@ -41,7 +41,7 @@ class EvaluationController extends Controller
             return $this->returnData($evaluation,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -72,7 +72,7 @@ class EvaluationController extends Controller
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 }

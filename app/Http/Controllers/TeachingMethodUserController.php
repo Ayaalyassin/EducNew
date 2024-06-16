@@ -48,7 +48,7 @@ class TeachingMethodUserController extends Controller
                 return $this->returnError("400", 'teaching method already exist');
 
             if ($user->wallet->value < $teaching_method->price)
-                return $this->returnError("500", 'not Enough money in wallet');
+                return $this->returnError("402", 'not Enough money in wallet');
             $user->wallet->update([
                 'value' => $user->wallet->value - $teaching_method->price
             ]);
@@ -63,7 +63,7 @@ class TeachingMethodUserController extends Controller
             return $this->returnData($profile_student,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
@@ -73,17 +73,17 @@ class TeachingMethodUserController extends Controller
         try {
             DB::beginTransaction();
             $profile_student=auth()->user()->profile_student()->first();
-
-            $teaching_method_user=$profile_student->teaching_methods_user()->where('teaching_method_users.id',$id)->first();
-            if(!$teaching_method_user)
-                return $this->returnError("404", 'not found');
-            $profile_student->teaching_methods_user()->newPivotStatement()->where('id',$id)->delete();
-
+            if($profile_student) {
+                $teaching_method_user = $profile_student->teaching_methods_user()->where('teaching_method_users.id', $id)->first();
+                if (!$teaching_method_user)
+                    return $this->returnError("404", 'not found');
+                $profile_student->teaching_methods_user()->newPivotStatement()->where('id', $id)->delete();
+            }
             DB::commit();
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 }

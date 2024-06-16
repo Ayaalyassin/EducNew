@@ -33,7 +33,7 @@ class ProfileTeacherController extends Controller
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -104,14 +104,14 @@ class ProfileTeacherController extends Controller
 
             $profile_teacher = ProfileTeacher::find($id);
             if (!$profile_teacher)
-                return $this->returnError("401", 'Not found');
+                return $this->returnError("404", 'Not found');
             $profile_teacher->loadMissing(['user','domains']);
 
             DB::commit();
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -165,7 +165,7 @@ class ProfileTeacherController extends Controller
             return $this->returnData($profile_teacher, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -185,7 +185,7 @@ class ProfileTeacherController extends Controller
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 }

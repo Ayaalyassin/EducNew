@@ -28,7 +28,7 @@ class NoteController extends Controller
 
             return $this->returnData($profile_students,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),$ex->getMessage());
+            return $this->returnError("500",$ex->getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ class NoteController extends Controller
             return $this->returnData($note, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
@@ -83,7 +83,7 @@ class NoteController extends Controller
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 }

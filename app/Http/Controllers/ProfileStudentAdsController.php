@@ -25,7 +25,7 @@ class ProfileStudentAdsController extends Controller
 
             return $this->returnData($profile_student_ads,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),$ex->getMessage());
+            return $this->returnError("500",$ex->getMessage());
         }
     }
 
@@ -55,7 +55,7 @@ class ProfileStudentAdsController extends Controller
             }
 
             if ($user->wallet->value < $ads->price)
-                return $this->returnError("403", 'not Enough money in wallet');
+                return $this->returnError("402", 'not Enough money in wallet');
             $user->wallet->update([
                 'value' => $user->wallet->value - $ads->price
             ]);
@@ -72,7 +72,7 @@ class ProfileStudentAdsController extends Controller
             return $this->returnData($profile_student,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
@@ -81,13 +81,14 @@ class ProfileStudentAdsController extends Controller
     {
         try {
             $profile_student=auth()->user()->profile_student()->first();
-
-            $profile_student_ads=$profile_student->profile_student_ads()->where('profile_student_ads.id',$id)->first();
-            if(!$profile_student_ads)
-                return $this->returnError("404", 'not found');
+            if($profile_student) {
+                $profile_student_ads = $profile_student->profile_student_ads()->where('profile_student_ads.id', $id)->first();
+                if (!$profile_student_ads)
+                    return $this->returnError("404", 'not found');
+            }
             return $this->returnData($profile_student_ads,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),$ex->getMessage());
+            return $this->returnError("500",$ex->getMessage());
         }
     }
 
@@ -103,17 +104,18 @@ class ProfileStudentAdsController extends Controller
         try {
             DB::beginTransaction();
             $profile_student=auth()->user()->profile_student()->first();
-
-            $profile_student_ads=$profile_student->profile_student_ads()->where('profile_student_ads.id',$id)->first();
-            if(!$profile_student_ads)
-                return $this->returnError("404", 'not found');
-            $profile_student->profile_student_ads()->newPivotStatement()->where('id',$id)->delete();
+            if($profile_student) {
+                $profile_student_ads = $profile_student->profile_student_ads()->where('profile_student_ads.id', $id)->first();
+                if (!$profile_student_ads)
+                    return $this->returnError("404", 'not found');
+                $profile_student->profile_student_ads()->newPivotStatement()->where('id', $id)->delete();
+            }
 
             DB::commit();
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 }

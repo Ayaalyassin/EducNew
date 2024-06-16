@@ -28,7 +28,7 @@ class TeachingMethodController extends Controller
             $teaching_methods=$profile_teacher->teaching_methods()->get();
             return $this->returnData($teaching_methods,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),$ex->getMessage());
+            return $this->returnError("500",$ex->getMessage());
         }
     }
 
@@ -41,7 +41,7 @@ class TeachingMethodController extends Controller
 
             $teaching_method= TeachingMethod::find($id);
             if (!$teaching_method) {
-                return $this->returnError("401",'teaching_method Not found');
+                return $this->returnError("404",'teaching_method Not found');
             }
             $teaching_method->increment('views');
 
@@ -49,7 +49,7 @@ class TeachingMethodController extends Controller
             return $this->returnData($teaching_method,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -61,10 +61,7 @@ class TeachingMethodController extends Controller
             DB::beginTransaction();
             $profile_teacher=auth()->user()->profile_teacher()->first();
 
-            $file=null;
-            if (isset($request->file)) {
-                $file = $this->saveImage($request->file, $this->uploadPath);
-            }
+            $file = $this->saveImage($request->file, $this->uploadPath);
 
             $teaching_method= $profile_teacher->teaching_methods()->create([
                 'title'=>$request->title,
@@ -80,7 +77,7 @@ class TeachingMethodController extends Controller
             return $this->returnData($teaching_method,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
@@ -115,7 +112,7 @@ class TeachingMethodController extends Controller
             return $this->returnData($teaching_method,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -128,7 +125,7 @@ class TeachingMethodController extends Controller
             $teaching_method=$profile_teacher->teaching_methods()->find($id);
 
             if (!$teaching_method) {
-                return $this->returnError("401",'teaching_method Not found');
+                return $this->returnError("404",'teaching_method Not found');
             }
             if (isset($teaching_method->file)) {
                 $this->deleteImage($teaching_method->file);
@@ -140,7 +137,7 @@ class TeachingMethodController extends Controller
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -154,7 +151,7 @@ class TeachingMethodController extends Controller
 
             return $this->returnData($teaching_methods, 'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(), "Please try again later");
+            return $this->returnError("500", "Please try again later");
         }
     }
 }

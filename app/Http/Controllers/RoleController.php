@@ -64,7 +64,7 @@ class RoleController extends Controller
                 return $this->returnError("404",'Not found');
 
             $data->delete();
-            return $this->returnData($data,'operation completed successfully');
+            return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             return $this->returnError($ex->getCode(),'Please try again later');
         }

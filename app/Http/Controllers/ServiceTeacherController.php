@@ -27,7 +27,7 @@ class ServiceTeacherController extends Controller
             $service_teachers=$profile_teacher->service_teachers()->get();
             return $this->returnData($service_teachers,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(), "Please try again later");
+            return $this->returnError("500", "Please try again later");
         }
     }
 
@@ -86,7 +86,7 @@ class ServiceTeacherController extends Controller
             return $this->returnData($ServiceTeacher,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -113,7 +113,7 @@ class ServiceTeacherController extends Controller
             return $this->returnData($service_teacher,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -132,7 +132,7 @@ class ServiceTeacherController extends Controller
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -147,7 +147,7 @@ class ServiceTeacherController extends Controller
 
             return $this->returnData($service_teachers, 'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(), "Please try again later");
+            return $this->returnError("500", "Please try again later");
         }
     }
 }

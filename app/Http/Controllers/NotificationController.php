@@ -17,7 +17,7 @@ class NotificationController extends Controller
             $notifications=$user->notifications()->orderBy('created_at','desc')->get();
             return $this->returnData($notifications,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
     public function getNotificationsViewed(){
@@ -26,7 +26,7 @@ class NotificationController extends Controller
             $notifications=$user->notifications()->where('seen',1)->get();
             return $this->returnData($notifications,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
     public function getNotificationsNotViewed(){
@@ -35,7 +35,7 @@ class NotificationController extends Controller
             $notifications=$user->notifications()->where('seen',0)->get();
             return $this->returnData($notifications,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),'Please try again later');
+            return $this->returnError("500",'Please try again later');
         }
     }
     public function getById($id){
@@ -48,7 +48,7 @@ class NotificationController extends Controller
             $notification->update(['seen'=>1]);
             return $this->returnData($notification,'operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),'Please try again later');
+            return $this->returnError("500",'Please try again later');
         }
     }
     public function delete($id){
@@ -61,7 +61,7 @@ class NotificationController extends Controller
             $notification->delete();
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
-            return $this->returnError($ex->getCode(),'Please try again later');
+            return $this->returnError("500",'Please try again later');
         }
     }
 }

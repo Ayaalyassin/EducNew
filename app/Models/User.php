@@ -15,8 +15,7 @@ use Spatie\Permission\Traits\HasPermissions;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles,//HasFilter
-         HasPermissions;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;//,HasFilter;
 
     /**
      * The attributes that are mass assignable.

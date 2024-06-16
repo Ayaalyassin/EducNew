@@ -31,7 +31,7 @@ class ReportController extends Controller
             return $this->returnData($reports,'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
@@ -70,7 +70,7 @@ class ReportController extends Controller
             return $this->returnData($profile_student, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), $ex->getMessage());
+            return $this->returnError("500", $ex->getMessage());
         }
     }
 
@@ -100,7 +100,7 @@ class ReportController extends Controller
             }
 
             if(!$is_lock)
-                return $this->returnError("401",'You Can’t do it');
+                return $this->returnError("403",'You Can’t do it');
 
 
             $report = $user->report_as_reporter()->where('reported_id', $reported_id)->first();

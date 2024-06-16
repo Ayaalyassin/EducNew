@@ -83,10 +83,10 @@ class AuthController extends Controller
         $token = JWTAuth::attempt($credentials);
         $exist=User::where('email',$request->email)->first();
         if($exist && !$token)
-            return $this->returnError(400,'The password is wrong');
+            return $this->returnError(401,'The password is wrong');
 
         if (!$token)
-            return $this->returnError(404, 'Account Not found');
+            return $this->returnError(401, 'Account Not found');
 
         $code=mt_rand(0, 999999);
         $exist->update([

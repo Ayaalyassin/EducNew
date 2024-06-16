@@ -28,7 +28,7 @@ class ProfileStudentController extends Controller
             return $this->returnData($profile_student, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -67,15 +67,14 @@ class ProfileStudentController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = auth()->user()->profile_student()->first();
-            if($user)
-                $user->loadMissing(['user']);
+            $user=auth()->user();
+            $user->loadMissing('profile_student');
 
             DB::commit();
             return $this->returnData($user, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -95,7 +94,7 @@ class ProfileStudentController extends Controller
             return $this->returnData($profile_student, 'operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 
@@ -116,7 +115,7 @@ class ProfileStudentController extends Controller
             return $this->returnSuccessMessage('operation completed successfully');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError($ex->getCode(), 'Please try again later');
+            return $this->returnError("500", 'Please try again later');
         }
     }
 }
